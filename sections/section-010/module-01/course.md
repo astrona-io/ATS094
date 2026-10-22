@@ -31,7 +31,7 @@ Your playground is a single-node `kind` cluster with these parts:
 | Flux v2.9.6 | The Flux command-line tool `flux` on your machine, and the Flux controllers in the namespace `flux-system`, installed with `flux install`. No repository is connected yet |
 | `gitea` (namespace `gitea`) | An in-cluster Git server. The user `gitops` (password `gitops-password`, lab-only) owns the repository `gitops/fleet` |
 | `gitops/fleet` | The folder `apps/podinfo` holds the `podinfo` application: a namespace, a Deployment with 2 replicas, a Service, and a Kustomize file `kustomization.yaml` that lists them |
-| `tester` (namespace `gitea`) | A client pod with `curl`, `jq` and `git` |
+| `tester` (namespace `gitea`) | A client pod with `curl` and `jq`; you run `git` on your own machine |
 
 The repository has one address that works both on your machine and inside the cluster: `http://gitea.localtest.me:3000/gitops/fleet.git`. On your machine it works only while a port-forward to Gitea runs in a second terminal; the parts start it when they need it. The server uses plain HTTP and a password because it is a lab. A real Git server uses HTTPS or SSH.
 

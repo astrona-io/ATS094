@@ -15,7 +15,7 @@ This is a **playground**, not a lab. It starts a fresh cluster, runs a Git serve
   | `apps/podinfo/` | The podinfo application: a Namespace, a Deployment, a Service and the Kustomize file `kustomization.yaml` that lists them |
   | `clusters/kind/` | Only a `README.md`. This is the folder Flux will sync for this cluster |
 
-- A `tester` pod in the namespace `gitea`, with `curl`, `jq` and `git`.
+- A `tester` pod in the namespace `gitea`, with `curl` and `jq`. You run `git` on your own machine.
 
 ## Reaching Gitea
 

@@ -14,7 +14,7 @@ This is a **playground**, not a lab. It starts a fresh cluster, installs an in-c
   | `apps/podinfo/` | `namespace.yaml`, `deployment.yaml` (Deployment `podinfo`, 2 replicas, port `9898`), `service.yaml`, and the Kustomize file `kustomization.yaml` that lists them |
   | `clusters/kind/` | A short `README.md` only |
 
-- A **`tester`** pod in the namespace `gitea`, with `curl`, `jq` and `git`.
+- A **`tester`** pod in the namespace `gitea`, with `curl` and `jq`. You run `git` on your own machine.
 
 The repository answers at `http://gitea.localtest.me:3000/gitops/fleet.git` both on your machine and inside the cluster. On your machine, that needs a port-forward running in a second terminal:
 

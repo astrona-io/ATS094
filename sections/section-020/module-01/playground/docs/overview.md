@@ -16,7 +16,7 @@ This is a **playground**, not a lab. It starts a fresh cluster, runs a Git serve
   | Flux `Kustomization` `podinfo` | kustomize-controller applies `./apps/podinfo` from that artifact every minute, prunes objects removed from Git, and waits for them to be ready |
 
 - The application `podinfo` in the namespace `podinfo`: a Deployment with two pods and a Service on port `9898`.
-- A `tester` pod in the namespace `gitea`, with `curl`, `jq` and `git`.
+- A `tester` pod in the namespace `gitea`, with `curl` and `jq`. You run `git` on your own machine.
 
 The Flux `Kustomization` object is not the same thing as the Kustomize file `kustomization.yaml` in `apps/podinfo`. The Flux object tells kustomize-controller which path to build; the file tells Kustomize which YAML files belong together.
 
