@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+# Prepares the environment for ats-094-lab-030-01.
+#
+# Graded lab bootstrap: this prepares the environment ONLY. It never installs
+# Flux and never creates the objects the task asks for. This script:
+#   1. puts the Flux CLI (pinned) on the PATH,
+#   2. starts Gitea and makes gitea.localtest.me resolve to it inside the cluster,
+#   3. creates the Gitea user gitops and the empty repository gitops/fleet.
+set -euo pipefail
+
+FLUX_VERSION="2.9.6"
+GIT_HOST="gitea.localtest.me"
+GIT_USER="gitops"
+GIT_PASSWORD="gitops-password"
+REPO="fleet"
+
+BIN_DIR="/usr/local/bin"
+[ -w "$BIN_DIR" ] || BIN_DIR="$HOME/.local/bin"
+mkdir -p "$BIN_DIR"
+export PATH="$BIN_DIR:$PATH"
+
+# Pin the version rather than accepting whatever flux happens to be on the
+# machine: the CLI installs controllers of its own version, and the course is
+# written against ${FLUX_VERSION}.
+have_version=""
+command -v flux >/dev/null 2>&1 && \
+  have_version=$(flux version --client 2>/dev/null | awk '/flux:/{print $2}' | sed 's/^v//')
+if [ "$have_version" != "$FLUX_VERSION" ]; then
+  OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  ARCH="$(uname -m)"
+  case "$ARCH" in x86_64) ARCH=amd64 ;; aarch64|arm64) ARCH=arm64 ;; esac
+  WORK="$(mktemp -d)"
+  trap 'rm -rf "$WORK"' EXIT
+  echo "[lab] Downloading Flux CLI ${FLUX_VERSION} (${OS}/${ARCH})..."
+  curl -fsSL "https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_${OS}_${ARCH}.tar.gz" \
+    | tar -xz -C "$WORK" flux
+  install -m 0755 "$WORK/flux" "$BIN_DIR/flux"
+fi
+flux version --client
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MANIFEST_DIR=""
+for candidate in "$SCRIPT_DIR/../manifests" "./manifests" "$SCRIPT_DIR/manifests"; do
+  [ -d "$candidate" ] && { MANIFEST_DIR="$candidate"; break; }
+done
+
+# lab-start.yaml is also listed under bootstrap.manifests in config.yaml, so it
+# may already be applied. kubectl apply is idempotent.
+echo "[lab] Applying Gitea and the tester pod..."
+kubectl apply -f "$MANIFEST_DIR/lab-start.yaml"
+kubectl -n gitea rollout status deployment/gitea --timeout=300s
+kubectl -n gitea rollout status deployment/tester --timeout=300s
+
+# One Git address for the reader's machine and the cluster: gitea.localtest.me
+# resolves to 127.0.0.1 on the machine (reached through a port-forward), and
+# this CoreDNS rewrite sends the same name to the Gitea Service in the cluster.
+if ! kubectl -n kube-system get configmap coredns -o jsonpath='{.data.Corefile}' | grep -q "$GIT_HOST"; then
+  echo "[lab] Adding the CoreDNS rewrite for ${GIT_HOST}..."
+  # The answer is rewritten back to the asked name: Go programs such as the
+  # Flux controllers ignore DNS answers whose name differs from the question.
+  COREFILE="$(kubectl -n kube-system get configmap coredns -o jsonpath='{.data.Corefile}' \
+    | awk '/^[[:space:]]*kubernetes / && !done {
+        print "    rewrite stop {"
+        print "        name regex gitea\\.localtest\\.me gitea-http.gitea.svc.cluster.local"
+        print "        answer name gitea-http\\.gitea\\.svc\\.cluster\\.local gitea.localtest.me"
+        print "    }"
+        done=1
+      } {print}')"
+  kubectl -n kube-system create configmap coredns --from-literal=Corefile="$COREFILE" \
+    --dry-run=client -o yaml | kubectl apply -f -
+  kubectl -n kube-system rollout restart deployment/coredns
+  kubectl -n kube-system rollout status deployment/coredns --timeout=120s
+fi
+
+gitea_api() {
+  # gitea_api METHOD PATH [JSON]: calls the Gitea API from the tester pod.
+  local method="$1" path="$2" body="${3:-}"
+  if [ -n "$body" ]; then
+    printf '%s' "$body" | kubectl -n gitea exec -i deploy/tester -- \
+      curl -fsS -u "$GIT_USER:$GIT_PASSWORD" -X "$method" -H 'Content-Type: application/json' \
+      --data-binary @- "http://gitea-http.gitea:3000/api/v1$path"
+  else
+    kubectl -n gitea exec deploy/tester -- \
+      curl -fsS -u "$GIT_USER:$GIT_PASSWORD" -X "$method" "http://gitea-http.gitea:3000/api/v1$path"
+  fi
+}
+
+echo "[lab] Creating the Gitea user ${GIT_USER} and the repository ${GIT_USER}/${REPO}..."
+kubectl -n gitea exec deploy/gitea -- gitea admin user create \
+  --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
+  --admin --must-change-password=false >/dev/null 2>&1 || true
+gitea_api GET "/repos/$GIT_USER/$REPO" >/dev/null 2>&1 || \
+  gitea_api POST "/user/repos" "{\"name\":\"$REPO\",\"auto_init\":true,\"default_branch\":\"main\",\"private\":true}" >/dev/null
+
+echo "[lab] Gitea and the Flux CLI are ready."

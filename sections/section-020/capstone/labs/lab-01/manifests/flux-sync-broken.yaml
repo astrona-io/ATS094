@@ -1,0 +1,30 @@
+# The capstone's Git sync, broken on purpose: the GitRepository URL names the
+# repository fleat instead of fleet, so source-controller never produces an
+# artifact. Applied by 02-seed-state.sh after `flux install`.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleat.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+  path: ./apps/podinfo
+  prune: true
+  wait: true
+  timeout: 3m

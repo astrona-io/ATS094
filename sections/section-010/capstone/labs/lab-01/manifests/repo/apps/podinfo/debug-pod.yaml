@@ -1,0 +1,13 @@
+# Temporary debugging pod. Remove before the release.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+  namespace: podinfo
+  labels:
+    app: debug
+spec:
+  containers:
+    - name: debug
+      image: nicolaka/netshoot:v0.13
+      command: ["sh", "-c", "while true; do sleep 30; done"]

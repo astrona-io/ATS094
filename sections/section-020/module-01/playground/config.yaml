@@ -1,0 +1,24 @@
+# Find Your Way Around The GitOps Toolkit (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-playground-020-01"
+  docs:
+    guide: "docs/overview.md"
+
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI, start Gitea with the seeded fleet repository, install Flux, and create the GitRepository fleet and the Flux Kustomization podinfo."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea (namespace gitea, Service gitea-http on port 3000) and the tester client pod."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+teardown:
+  keepCluster: false

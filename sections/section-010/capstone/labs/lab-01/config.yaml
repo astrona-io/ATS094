@@ -1,0 +1,56 @@
+# Make Git The Only Source Of Truth (section 010 capstone)
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the repository gitops/fleet, the CoreDNS rewrite and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-capstone-010-setup"
+      description: "Applies podinfo once with prune off, suspends the Flux Kustomization, and scales podinfo to 5 by hand"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-sync-active"
+      description: "Confirms podinfo is not suspended, prunes, is Ready and applied the latest fetched revision"
+      type: "file"
+      source: "validation/validate-sync-active.sh"
+    - name: "validate-git-desired-state"
+      description: "Confirms Git on main asks for 3 replicas and no longer holds the debug pod"
+      type: "file"
+      source: "validation/validate-git-desired-state.sh"
+    - name: "validate-cluster-matches-git"
+      description: "Confirms podinfo runs 3 ready replicas and the debug pod is gone from the cluster and the inventory"
+      type: "file"
+      source: "validation/validate-cluster-matches-git.sh"
+    # Runs last: it changes the cluster on purpose and expects Flux to put it back.
+    - name: "validate-drift-corrected"
+      description: "Scales podinfo to 1, reconciles, and confirms Flux restores the 3 replicas from Git"
+      type: "file"
+      source: "validation/validate-drift-corrected.sh"
+
+teardown:
+  keepCluster: false

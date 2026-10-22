@@ -1,0 +1,59 @@
+# Find The Controller That Stopped Working (capstone)
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the seeded fleet repository, and the four default Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-capstone-020-setup"
+      description: "Applies the broken Git sync, stops kustomize-controller, and records the objects' UIDs"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every running Flux controller are ready"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-kustomize-controller"
+      description: "Confirms kustomize-controller has a ready replica"
+      type: "file"
+      source: "validation/validate-kustomize-controller.sh"
+    - name: "validate-gitrepository"
+      description: "Confirms the GitRepository fleet has the right URL, is Ready and holds an artifact of main"
+      type: "file"
+      source: "validation/validate-gitrepository.sh"
+    - name: "validate-kustomization"
+      description: "Confirms the Flux Kustomization podinfo is Ready and applied the current revision"
+      type: "file"
+      source: "validation/validate-kustomization.sh"
+    - name: "validate-podinfo-from-git"
+      description: "Confirms podinfo was applied by Flux and runs the replicas Git asks for"
+      type: "file"
+      source: "validation/validate-podinfo-from-git.sh"
+    - name: "validate-objects-kept"
+      description: "Confirms the GitRepository and the Kustomization were fixed, not deleted and recreated"
+      type: "file"
+      source: "validation/validate-objects-kept.sh"
+
+teardown:
+  keepCluster: false

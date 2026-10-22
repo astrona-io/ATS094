@@ -1,0 +1,55 @@
+# Recover A Cluster Whose Bootstrap Broke
+# Astrona graded capstone. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux-cli"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, adds the CoreDNS rewrite and creates gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-capstone-030-setup"
+      description: "Bootstraps Flux and deploys podinfo, then breaks the podinfo path, the Git credential and the flux-system path"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The repair a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-source-current"
+      description: "Confirms GitRepository flux-system is Ready at the latest commit on main"
+      type: "file"
+      source: "validation/validate-source-current.sh"
+    - name: "validate-flux-system-sync"
+      description: "Confirms Kustomization flux-system syncs ./clusters/kind, is Ready and applied the current revision"
+      type: "file"
+      source: "validation/validate-flux-system-sync.sh"
+    - name: "validate-podinfo"
+      description: "Confirms the podinfo path is fixed in Git and in the cluster, and podinfo runs"
+      type: "file"
+      source: "validation/validate-podinfo.sh"
+    - name: "validate-password-rotated"
+      description: "Confirms Gitea still accepts only the rotated password"
+      type: "file"
+      source: "validation/validate-password-rotated.sh"
+
+teardown:
+  keepCluster: false

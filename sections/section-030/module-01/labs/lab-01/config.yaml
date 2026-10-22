@@ -1,0 +1,55 @@
+# Bootstrap Flux Into A Kind Cluster
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-lab-030-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux-cli"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, adds the CoreDNS rewrite and creates gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-lab-030-01-setup"
+      description: "Seeds gitops/fleet with apps/podinfo; Flux stays uninstalled"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the tester pod the reference solution depends on"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The bootstrap and commit a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-flux-check"
+      description: "Confirms flux check passes"
+      type: "file"
+      source: "validation/validate-flux-check.sh"
+    - name: "validate-flux-system-sync"
+      description: "Confirms flux-system reads gitops/fleet, syncs ./clusters/kind, and is Ready"
+      type: "file"
+      source: "validation/validate-flux-system-sync.sh"
+    - name: "validate-bootstrap-files-in-git"
+      description: "Confirms the bootstrap manifests are committed under clusters/kind/flux-system"
+      type: "file"
+      source: "validation/validate-bootstrap-files-in-git.sh"
+    - name: "validate-podinfo-from-git"
+      description: "Confirms the Kustomization podinfo comes from Git, is Ready, and podinfo runs"
+      type: "file"
+      source: "validation/validate-podinfo-from-git.sh"
+
+teardown:
+  keepCluster: false

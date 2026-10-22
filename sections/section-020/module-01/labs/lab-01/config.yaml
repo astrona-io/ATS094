@@ -1,0 +1,51 @@
+# Add The Image Automation Controllers
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the seeded fleet repository, and the four default Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-lab-020-01-setup"
+      description: "Checks the starting state: Flux runs without the image controllers"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every Flux controller are ready"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The commands a correct learner runs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-image-controllers"
+      description: "Confirms both image controllers are Available and their CRDs exist"
+      type: "file"
+      source: "validation/validate-image-controllers.sh"
+    - name: "validate-default-controllers"
+      description: "Confirms the four default controllers are still Available and flux check passes"
+      type: "file"
+      source: "validation/validate-default-controllers.sh"
+    - name: "validate-imagerepository-ready"
+      description: "Confirms the ImageRepository podinfo scans ghcr.io/stefanprodan/podinfo and is Ready"
+      type: "file"
+      source: "validation/validate-imagerepository-ready.sh"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,275 @@
+# Course manifest for ATS094 - Fundamentals & GitOps Toolkit Architecture (FluxCD).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS094
+  title: "FluxCD: Fundamentals & GitOps Toolkit Architecture"
+  maturity: draft
+  description: >
+    Training material covering the Fundamentals & GitOps Toolkit Architecture
+    domain of the FluxCD training path: the OpenGitOps principles and
+    pull-based delivery, the reconciliation loop and drift correction, the
+    GitOps Toolkit controllers and their APIs, the Flux command-line tool
+    against the controllers in the cluster, optional components, and
+    bootstrapping Flux into a cluster from a Git repository. Each module pairs
+    a layered reader with an ungraded hands-on playground and a graded
+    practice lab. Each section closes with an integration capstone.
+    Written for Flux v2.9.6.
+
+  certification:
+    name: FluxCD
+    code: FLUX
+    provider: Astrona
+    domain: Fundamentals & GitOps Toolkit Architecture
+    weight: 10
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "GitOps Principles And The Reconciliation Loop"
+    description: >
+      The four OpenGitOps principles, pull-based against push-based delivery,
+      and Flux's reconciliation loop in practice: a GitRepository and a Flux
+      Kustomization that apply an application from Git, correct drift and
+      prune what Git no longer holds.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Reconcile A Cluster From Git With Flux"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "GitOps Principles And Pull-Based Delivery"
+        path: sections/section-010/module-01/course-01-gitops-principles-and-pull-based-delivery.md
+      - type: reading
+        title: "Your First GitRepository And Kustomization"
+        path: sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Make Flux Apply The Application From Git Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: reconciliation
+        task_kind: troubleshooting
+        tags: [gitrepository, kustomization, branch, path, flux-get, flux-events]
+        learning_goals:
+          - Read why a GitRepository and a Flux Kustomization are not Ready from flux get and flux events
+          - Fix the branch and the path so Flux applies the application from Git
+          - Prove the fix with Ready objects and running podinfo pods
+        resources:
+          - name: "GitRepository API"
+            url: https://fluxcd.io/flux/components/source/gitrepositories/
+          - name: "Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: "Drift Correction And Pruning"
+        path: sections/section-010/module-01/course-03-drift-correction-and-pruning.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Make Git The Only Source Of Truth Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: gitops-principles
+        task_kind: troubleshooting
+        tags: [desired-state, drift-detection, prune, kustomization, interval, flux-reconcile]
+        learning_goals:
+          - Turn on pruning and fix a suspended Flux Kustomization so Git decides what runs
+          - Change the application through Git, not through kubectl
+          - Prove that Flux reverts a manual change and removes an object deleted from Git
+        resources:
+          - name: "Core concepts"
+            url: https://fluxcd.io/flux/concepts/
+          - name: "Kustomization API: prune and suspend"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "OpenGitOps principles"
+            url: https://opengitops.dev/
+
+  - id: module-020
+    title: "The GitOps Toolkit Architecture"
+    description: >
+      The GitOps Toolkit controllers, the custom resources each one owns and
+      how an artifact moves from source-controller to kustomize-controller;
+      the Flux command-line tool as a client of those controllers; and
+      optional components such as the image automation controllers.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Find Your Way Around The GitOps Toolkit"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "The Controllers And The APIs They Own"
+        path: sections/section-020/module-01/course-01-controllers-and-apis.md
+      - type: reading
+        title: "The Flux CLI Against The Controllers"
+        path: sections/section-020/module-01/course-02-flux-cli-against-the-controllers.md
+      - type: reading
+        title: "Choosing Components"
+        path: sections/section-020/module-01/course-03-choosing-components.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Add The Image Automation Controllers Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: toolkit-architecture
+        task_kind: build
+        tags: [components-extra, image-controllers, crds, flux-check, flux-cli]
+        learning_goals:
+          - Find which controller and CRD a failing object needs
+          - Add the image reflector and image automation controllers without removing the default ones
+          - Prove the result with flux check and a Ready ImageRepository
+        resources:
+          - name: "Flux components"
+            url: https://fluxcd.io/flux/components/
+          - name: "flux install"
+            url: https://fluxcd.io/flux/cmd/flux_install/
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Find The Controller That Stopped Working Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: cli
+        task_kind: troubleshooting
+        tags: [source-controller, kustomize-controller, flux-check, flux-logs, flux-events, artifact]
+        learning_goals:
+          - Find which controller is not reconciling from flux check, flux get and flux logs
+          - Fix a stopped controller and a source that cannot produce an artifact
+          - Prove the fix with every Flux object Ready and the application running
+        resources:
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/
+          - name: "flux check"
+            url: https://fluxcd.io/flux/cmd/flux_check/
+          - name: "flux logs"
+            url: https://fluxcd.io/flux/cmd/flux_logs/
+
+  - id: module-030
+    title: "Bootstrapping Flux"
+    description: >
+      What flux bootstrap does and the files it writes, bootstrapping Flux
+      into a kind cluster from an in-cluster Git server, verifying the
+      controllers and CRDs, and the credentials Flux uses to read its
+      repository: tokens, SSH deploy keys and the flux-system Secret.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Bootstrap Flux From A Git Repository"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "What flux bootstrap Does"
+        path: sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+      - type: reading
+        title: "Bootstrapping A Kind Cluster And Verifying It"
+        path: sections/section-030/module-01/course-02-bootstrapping-a-kind-cluster.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Bootstrap Flux Into A Kind Cluster Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: bootstrap
+        task_kind: build
+        tags: [flux-bootstrap, flux-system, gitea, crds, flux-check, self-management]
+        learning_goals:
+          - Bootstrap Flux into a cluster from an existing Git repository with flux bootstrap git
+          - Verify the controllers, the CRDs and the flux-system objects
+          - Deploy the application by committing a Flux Kustomization to the bootstrapped repository
+        resources:
+          - name: "Bootstrap a generic Git server"
+            url: https://fluxcd.io/flux/installation/bootstrap/generic-git-server/
+          - name: "flux bootstrap git"
+            url: https://fluxcd.io/flux/cmd/flux_bootstrap_git/
+          - name: "Installation"
+            url: https://fluxcd.io/flux/installation/
+      - type: reading
+        title: "Deploy Keys, Tokens And The flux-system Secret"
+        path: sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Recover A Cluster Whose Bootstrap Broke Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: bootstrap
+        task_kind: troubleshooting
+        tags: [flux-system, git-credentials, flux-bootstrap, path, self-management, flux-events]
+        learning_goals:
+          - Find why the flux-system GitRepository and Kustomization stopped reconciling
+          - Replace a rotated Git credential and fix the sync path without reinstalling Flux by hand
+          - Prove that Flux manages itself again and applies a change pushed to Git
+        resources:
+          - name: "Bootstrap a generic Git server"
+            url: https://fluxcd.io/flux/installation/bootstrap/generic-git-server/
+          - name: "flux create secret git"
+            url: https://fluxcd.io/flux/cmd/flux_create_secret_git/
+          - name: "Flux troubleshooting cheatsheet"
+            url: https://fluxcd.io/flux/cheatsheets/troubleshooting/

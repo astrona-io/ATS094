@@ -1,0 +1,10 @@
+# The ImageRepository the task asks the learner to apply. Kept here for
+# the reference solution; the learner gets the same YAML in question.md.
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  image: ghcr.io/stefanprodan/podinfo
+  interval: 5m
