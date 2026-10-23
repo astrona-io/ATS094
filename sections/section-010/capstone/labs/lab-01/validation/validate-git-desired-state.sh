@@ -2,6 +2,21 @@
 # PASS when Git, on main, asks for 3 replicas of podinfo and no longer holds the
 # debug pod. Reads the repository through the Gitea API from the tester pod.
 set -uo pipefail
+# grep -q stops reading at the first match; under pipefail the command
+# writing into the pipe then fails with SIGPIPE and a match looks like a
+# failure. This wrapper reads all input instead and keeps grep's exit status.
+grep() {
+  local arg quiet=0 args=()
+  for arg in "$@"; do
+    case "$arg" in
+      --quiet|--silent) quiet=1 ;;
+      --*) args+=("$arg") ;;
+      -*q*) quiet=1; [ "$arg" = "-q" ] || args+=("${arg//q/}") ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+  if [ "$quiet" = 1 ]; then command grep "${args[@]}" >/dev/null; else command grep "$@"; fi
+}
 
 AUTH="gitops:gitops-password"
 API="http://gitea-http.gitea:3000/api/v1/repos/gitops/fleet"
