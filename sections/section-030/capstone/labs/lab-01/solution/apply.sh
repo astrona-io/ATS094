@@ -3,10 +3,10 @@
 # `astrona run` never runs this, so the capstone stays broken for the student.
 # Taken from solution.md - if one changes, change the other.
 #
-# Running `flux bootstrap git` again with the rotated password repairs two
-# faults at once: it rewrites the flux-system Secret and re-applies
-# gotk-sync.yaml, which puts the flux-system Kustomization back on
-# ./clusters/kind. The podinfo path is fixed in Git.
+# flux bootstrap refuses to change the path of an existing flux-system
+# Kustomization, so the hand-patched path goes back to ./clusters/kind first.
+# Running `flux bootstrap git` again with the rotated password then rewrites
+# the flux-system Secret. The podinfo path is fixed in Git.
 #
 # This script starts the port-forward in the background itself. If
 # gitea.localtest.me does not resolve to 127.0.0.1 on this machine, add
@@ -46,8 +46,10 @@ put_file() {
 
 start_port_forward
 
-# Faults 2 and 3: new credential in the flux-system Secret, flux-system back on
-# ./clusters/kind. Bootstrap is idempotent, so this changes nothing else.
+# Faults 2 and 3: flux-system back on ./clusters/kind (bootstrap refuses to
+# change an existing Kustomization's path), then the new credential in the
+# flux-system Secret. Bootstrap is idempotent, so this changes nothing else.
+kubectl -n flux-system patch kustomization flux-system --type merge -p '{"spec":{"path":"./clusters/kind"}}'
 flux bootstrap git \
   --url="$REPO_URL" \
   --branch=main \

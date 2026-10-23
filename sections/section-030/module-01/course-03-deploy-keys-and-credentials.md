@@ -58,7 +58,7 @@ flux get sources git -A
 
 The `GitRepository` `flux-system` stays `Ready`, at the same revision as before. After a real rotation you would run the same commands with the new password, and the `GitRepository` would turn `Ready` again at the newest commit.
 
-Running `flux bootstrap git` again with the new credential is the other way to rotate. It updates the Secret in the same way, and it also applies the sync manifests again, which repairs a `flux-system` `GitRepository` or `Kustomization` that someone changed by hand. Bootstrap is idempotent, so it changes nothing else.
+Running `flux bootstrap git` again with the new credential is the other way to rotate. It updates the Secret in the same way, and it also applies the sync manifests again. Bootstrap is idempotent, so it changes nothing else. One exception: if someone changed the path of the `flux-system` `Kustomization` by hand, bootstrap stops with `would overwrite path ... of existing Kustomization`, so put the path back with `kubectl patch` before you run it.
 
 You now know where Flux keeps its Git credential, what the two kinds look like, and how to replace one. The question to keep in mind for any real cluster is who will notice when the credential stops working, because a stale cluster looks healthy until you check the source.
 

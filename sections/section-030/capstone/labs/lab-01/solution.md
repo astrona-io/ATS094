@@ -38,9 +38,15 @@ flowchart TB
 
 The diagram shows why neither fault heals: the source cannot fetch with the old password, and the patched path stops the Kustomization from applying the file that would reset its own path.
 
-## Step 3: Repair the credential and the sync path with bootstrap
+## Step 3: Repair the sync path and the credential
 
-Running `flux bootstrap git` again with the new password fixes both faults at once. Bootstrap is idempotent: it writes the new password into the `flux-system` Secret, and it applies the sync manifests again, which puts the path back to `./clusters/kind`. Start the port-forward in a second terminal first:
+`flux bootstrap git` refuses to change the path of an existing `flux-system` Kustomization: when the path in the cluster differs from `--path`, it stops with `sync path configuration ("./clusters/kind") would overwrite path ("./clusters/kind-old") of existing Kustomization`. So put the path back to what Git says first:
+
+```sh
+kubectl -n flux-system patch kustomization flux-system --type merge -p '{"spec":{"path":"./clusters/kind"}}'
+```
+
+Now running `flux bootstrap git` again with the new password repairs the credential. Bootstrap is idempotent: it writes the new password into the `flux-system` Secret and applies the sync manifests again. Start the port-forward in a second terminal first:
 
 ```sh
 kubectl -n gitea port-forward svc/gitea-http 3000:3000
