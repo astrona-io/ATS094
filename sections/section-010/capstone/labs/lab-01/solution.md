@@ -68,7 +68,7 @@ flux reconcile kustomization podinfo --with-source
 flux events --for Kustomization/podinfo
 ```
 
-The events show kustomize-controller configuring the Deployment and deleting the pod `debug`. It deleted the pod because the pod was in the inventory, `prune` was `true`, and the new revision no longer had it.
+The events show kustomize-controller configuring the Deployment and deleting the pod `debug`. It deleted the pod because the pod was in the inventory, `prune` was `true`, and the new revision no longer had it. The pod then shows `Terminating` for up to 30 seconds: its shell ignores the stop signal, so the kubelet waits for the full grace period before it removes the pod.
 
 ## Step 5: Prove the fix
 

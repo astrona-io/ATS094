@@ -87,3 +87,5 @@ commit_file DELETE apps/podinfo/debug-pod.yaml "Remove the debug pod"
 # 3. Resume, and apply the new revision now.
 flux resume kustomization podinfo --timeout=5m
 flux reconcile kustomization podinfo --with-source --timeout=5m
+# The pruned debug pod takes its 30-second grace period to stop.
+kubectl -n podinfo wait --for=delete pod/debug --timeout=120s

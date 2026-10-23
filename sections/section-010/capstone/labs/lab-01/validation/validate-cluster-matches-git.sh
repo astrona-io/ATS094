@@ -30,7 +30,9 @@ if [ "$SPEC" != "3" ] || [ "$READY" != "3" ]; then
   exit 1
 fi
 
-if kubectl -n podinfo get pod debug >/dev/null 2>&1; then
+# A pruned pod stays Terminating for its grace period (the debug container
+# ignores SIGTERM, so 30 seconds); wait up to 90 seconds for it to go.
+if ! kubectl -n podinfo wait --for=delete pod/debug --timeout=90s >/dev/null 2>&1; then
   echo "FAIL: the pod debug still runs in the namespace podinfo."
   exit 1
 fi
