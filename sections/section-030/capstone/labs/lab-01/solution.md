@@ -65,7 +65,15 @@ flux bootstrap git \
   --allow-insecure-http=true
 ```
 
-Bootstrap finds the component manifests in Git unchanged, so it pushes no new commit for them. It updates the Secret, applies the sync manifests and waits for the `flux-system` Kustomization. Check the two objects:
+Bootstrap finds the component manifests in Git unchanged, so it pushes no new commit for them. It updates the Secret, applies the sync manifests and waits for the `flux-system` Kustomization.
+
+Bootstrap can still stop with `authentication required` while it waits for the `GitRepository`, even though the Secret now holds the right password. source-controller does not watch Secrets. After the failed fetches it waits longer between retries, so its next attempt can come after bootstrap has given up. Ask for a fetch now:
+
+```sh
+flux reconcile source git flux-system
+```
+
+Check the two objects:
 
 ```sh
 flux get sources git -A

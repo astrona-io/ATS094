@@ -51,6 +51,9 @@ start_port_forward
 # Faults 2 and 3: flux-system back on ./clusters/kind (bootstrap refuses to
 # change an existing Kustomization's path), then the new credential in the
 # flux-system Secret. Bootstrap is idempotent, so this changes nothing else.
+# source-controller does not watch Secrets and is backing off after the failed
+# fetches, so bootstrap's health check can give up before the next retry. The
+# reconcile asks for a fetch now and still fails if the credential is wrong.
 kubectl -n flux-system patch kustomization flux-system --type merge -p '{"spec":{"path":"./clusters/kind"}}'
 flux bootstrap git \
   --url="$REPO_URL" \
@@ -60,7 +63,8 @@ flux bootstrap git \
   --password="$GIT_PASSWORD" \
   --token-auth=true \
   --allow-insecure-http=true \
-  --silent
+  --silent \
+  || flux reconcile source git flux-system
 
 # Fault 1: put the podinfo path back to the folder that exists, in Git.
 put_file clusters/kind/podinfo.yaml "Point podinfo back at apps/podinfo" <<'YAML'
