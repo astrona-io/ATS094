@@ -29,8 +29,6 @@ training:
     name: FluxCD
     code: FLUX
     provider: Astrona
-    domain: Fundamentals & GitOps Toolkit Architecture
-    weight: 10
 
 modules:
 
