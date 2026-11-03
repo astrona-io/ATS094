@@ -1,0 +1,245 @@
+# Knowledge check for module 02 of section 010. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-010-m02
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-010-module-02
+  title: "The Reconciliation Loop In Depth"
+placement:
+  position: after
+  reading: sections/section-010/module-02/labs/lab-01/question.md
+questions:
+  - id: ats094-010-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read the Ready, Reconciling and Stalled conditions"
+    source_readings:
+      - sections/section-010/module-02/course-01-the-reconcile-cycle-and-status-conditions.md
+    prompt: "What does `Reconciling` set to `True` on a Flux `Kustomization` mean?"
+    options:
+      - id: a
+        text: "The controller is working on a change or retrying."
+        explanation: "Correct. `Reconciling` is `True` while the controller is working or retrying. It is normal during a run."
+      - id: b
+        text: "The object is invalid and will never succeed."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The object is suspended."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The Git repository has no new commit."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. `Reconciling` is `True` while the controller is working or retrying. It is normal during a run."
+
+  - id: ats094-010-m02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare generation and observedGeneration"
+    source_readings:
+      - sections/section-010/module-02/course-01-the-reconcile-cycle-and-status-conditions.md
+    prompt: "A Flux `Kustomization` shows `Ready True`, but `.metadata.generation` is 5 and `.status.observedGeneration` is 4. What does that mean?"
+    options:
+      - id: a
+        text: "The object failed its health check."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The object was applied twice."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The artifact is out of date."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The status describes an older spec; the controller has not handled the latest edit yet."
+        explanation: "Correct. The controller copies the generation it worked on into `observedGeneration`. A lower value means the status is about an older spec."
+    correct_option: d
+    explanation: "Correct. The controller copies the generation it worked on into `observedGeneration`. A lower value means the status is about an older spec."
+
+  - id: ats094-010-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell lastAttemptedRevision from lastAppliedRevision"
+    source_readings:
+      - sections/section-010/module-02/course-01-the-reconcile-cycle-and-status-conditions.md
+    prompt: "A new commit breaks the build. Which statement about the status is correct?"
+    options:
+      - id: a
+        text: "Both fields move to the new commit."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Both fields stay on the old commit and the new commit is never recorded."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`lastAttemptedRevision` moves to the new commit while `lastAppliedRevision` stays on the last working one."
+        explanation: "Correct. The attempted revision shows the newest commit that was tried. The applied revision stays on the last one that worked."
+      - id: d
+        text: "`lastAppliedRevision` is deleted."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The attempted revision shows the newest commit that was tried. The applied revision stays on the last one that worked."
+
+  - id: ats094-010-m02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe the steps of one run"
+    source_readings:
+      - sections/section-010/module-02/course-01-the-reconcile-cycle-and-status-conditions.md
+    prompt: "Which step does kustomize-controller do right after it checks `dependsOn`?"
+    options:
+      - id: a
+        text: "It prunes objects that left Git."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It downloads the artifact of the source and builds the path."
+        explanation: "Correct. The order is: check suspension, check dependencies, download the artifact, build, apply, prune, wait for health, write status."
+      - id: c
+        text: "It waits for health checks."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It deletes the status."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The order is: check suspension, check dependencies, download the artifact, build, apply, prune, wait for health, write status."
+
+  - id: ats094-010-m02-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Set interval, retryInterval and timeout"
+    source_readings:
+      - sections/section-010/module-02/course-02-intervals-retries-and-health-checks.md
+    prompt: "Which field sets how long kustomize-controller waits before it retries after a failed run?"
+    options:
+      - id: a
+        text: "`spec.retryInterval`"
+        explanation: "Correct. `retryInterval` sets the wait after a failure. When it is not set, the value of `interval` is used."
+      - id: b
+        text: "`spec.timeout`"
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.interval` of the `GitRepository`"
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.prune`"
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. `retryInterval` sets the wait after a failure. When it is not set, the value of `interval` is used."
+
+  - id: ats094-010-m02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain wait and healthChecks"
+    source_readings:
+      - sections/section-010/module-02/course-02-intervals-retries-and-health-checks.md
+    prompt: "A Flux `Kustomization` has `wait: true` and a `healthChecks` list. What does kustomize-controller check?"
+    options:
+      - id: a
+        text: "Only the objects in the `healthChecks` list."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Both lists, and fails if either one is unhealthy."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Nothing, because the two fields cancel each other."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "All objects it applied; the `healthChecks` list is ignored."
+        explanation: "Correct. When `wait` is `true`, the controller checks every applied object and ignores `healthChecks`."
+    correct_option: d
+    explanation: "Correct. When `wait` is `true`, the controller checks every applied object and ignores `healthChecks`."
+
+  - id: ats094-010-m02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diagnose a failed health check"
+    source_readings:
+      - sections/section-010/module-02/course-02-intervals-retries-and-health-checks.md
+    prompt: "A health check names the Deployment `cache` in the namespace `default`, but the Deployment runs in `platform`. What happens?"
+    options:
+      - id: a
+        text: "The controller finds the Deployment in `platform` on its own."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The controller rolls back everything it applied."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The object is not found, the run fails at the health check, and the applied objects stay in the cluster."
+        explanation: "Correct. A health check does not search other namespaces. A failed check does not roll back what was applied."
+      - id: d
+        text: "The check is skipped and the object becomes `Ready`."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. A health check does not search other namespaces. A failed check does not roll back what was applied."
+
+  - id: ats094-010-m02-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order Flux Kustomizations with dependsOn"
+    source_readings:
+      - sections/section-010/module-02/course-03-dependencies-and-ordering.md
+    prompt: "What does `spec.dependsOn` on a Flux `Kustomization` name?"
+    options:
+      - id: a
+        text: "Folders that must exist in Git."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Other Flux objects that must be `Ready` before this one runs."
+        explanation: "Correct. Each entry names a Flux `Kustomization` or `HelmRelease`, optionally with its namespace."
+      - id: c
+        text: "Deployments that must be running."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Namespaces that must exist."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Each entry names a Flux `Kustomization` or `HelmRelease`, optionally with its namespace."
+
+  - id: ats094-010-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read a missing dependency"
+    source_readings:
+      - sections/section-010/module-02/course-03-dependencies-and-ordering.md
+    prompt: "`apps` reports that the dependency `flux-system/infrastructure` was not found. What is the likely cause?"
+    options:
+      - id: a
+        text: "No Flux `Kustomization` with that name exists, for example because the real object is named `infra`."
+        explanation: "Correct. `dependsOn` takes the name of a Flux object. A wrong name stops the run before the build."
+      - id: b
+        text: "The `GitRepository` is not ready."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The folder `infrastructure` is missing in Git."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The namespace `flux-system` is missing."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. `dependsOn` takes the name of a Flux object. A wrong name stops the run before the build."
+
+  - id: ats094-010-m02-q10
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Predict when Flux corrects drift"
+    source_readings:
+      - sections/section-010/module-02/course-04-server-side-apply-and-finding-what-manages-an-object.md
+    prompt: "A manifest in Git does not set `spec.replicas`, and someone scales the Deployment by hand. What does Flux do at the next run?"
+    options:
+      - id: a
+        text: "It sets the replicas to 1."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It deletes and recreates the Deployment."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It reports the object as `Stalled`."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Nothing: Flux does not own a field that its manifest does not set."
+        explanation: "Correct. Server-side apply claims only the fields in the manifest, so a field left out is not corrected."
+    correct_option: d
+    explanation: "Correct. Server-side apply claims only the fields in the manifest, so a field left out is not corrected."

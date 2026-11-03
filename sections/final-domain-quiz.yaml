@@ -217,3 +217,140 @@ questions:
         explanation: "Not correct. The kubeconfig does not hold the Git credential."
     correct_option: b
     explanation: "Correct. The `GitRepository` refers to it by name in `spec.secretRef`."
+  - id: ats094-final-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare generation and observedGeneration"
+    source_readings:
+      - sections/section-010/module-02/course-01-the-reconcile-cycle-and-status-conditions.md
+    prompt: "A Flux `Kustomization` shows `Ready True`, but `.metadata.generation` is 5 and `.status.observedGeneration` is 4. What does that mean?"
+    options:
+      - id: a
+        text: "The object failed its health check."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The object was applied twice."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The artifact is out of date."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The status describes an older spec; the controller has not handled the latest edit yet."
+        explanation: "Correct. The controller copies the generation it worked on into `observedGeneration`. A lower value means the status is about an older spec."
+    correct_option: d
+    explanation: "Correct. The controller copies the generation it worked on into `observedGeneration`. A lower value means the status is about an older spec."
+
+  - id: ats094-final-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diagnose a failed health check"
+    source_readings:
+      - sections/section-010/module-02/course-02-intervals-retries-and-health-checks.md
+    prompt: "A health check names the Deployment `cache` in the namespace `default`, but the Deployment runs in `platform`. What happens?"
+    options:
+      - id: a
+        text: "The controller finds the Deployment in `platform` on its own."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The controller rolls back everything it applied."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The object is not found, the run fails at the health check, and the applied objects stay in the cluster."
+        explanation: "Correct. A health check does not search other namespaces. A failed check does not roll back what was applied."
+      - id: d
+        text: "The check is skipped and the object becomes `Ready`."
+        explanation: "Not correct. This option does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. A health check does not search other namespaces. A failed check does not roll back what was applied."
+
+  - id: ats094-final-q13
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Follow a branch, a tag or a commit"
+    source_readings:
+      - sections/section-020/module-02/course-02-gitrepository-refs-include-and-ignore.md
+    prompt: "A `GitRepository` has no `spec.ref`. Which branch does source-controller follow?"
+    options:
+      - id: a
+        text: "`main`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`master`"
+        explanation: "Correct. Without `ref`, the branch is `master`. A repository with only `main` never becomes ready."
+      - id: c
+        text: "`develop`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The default branch of the Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Without `ref`, the branch is `master`. A repository with only `main` never becomes ready."
+
+  - id: ats094-final-q14
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diagnose a missing Secret"
+    source_readings:
+      - sections/section-020/module-02/course-03-authentication-for-git-sources.md
+    prompt: "The `Ready` message of a `GitRepository` says that the Secret `fleet-credentials` was not found. What is the likely fix?"
+    options:
+      - id: a
+        text: "Correct `spec.secretRef.name` to a Secret that exists in the same namespace."
+        explanation: "Correct. A `secretRef` names a Secret in the namespace of the source. A wrong name stops the clone before it starts."
+      - id: b
+        text: "Increase `spec.timeout`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Change `spec.ref` to a tag."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Suspend and resume the source."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. A `secretRef` names a Secret in the namespace of the source. A wrong name stops the clone before it starts."
+
+  - id: ats094-final-q15
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain the order build, substitute, apply"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-overlays.md
+    prompt: "In which order does kustomize-controller handle a Flux `Kustomization`?"
+    options:
+      - id: a
+        text: "Build the folder, substitute variables, then apply."
+        explanation: "Correct. The controller builds the manifests, replaces variables in the result, and applies last."
+      - id: b
+        text: "Apply, then build, then substitute."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Substitute, then apply, then build."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Build, apply, then substitute."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The controller builds the manifests, replaces variables in the result, and applies last."
+
+  - id: ats094-final-q16
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read variables from a ConfigMap"
+    source_readings:
+      - sections/section-020/module-03/course-03-variable-substitution.md
+    prompt: "Which `substituteFrom` entry reads variables from a ConfigMap named `cluster-vars`?"
+    options:
+      - id: a
+        text: "`kind: Secret` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`kind: ConfigMap` and `name: cluster-vars`"
+        explanation: "Correct. The kind must match the real object. A wrong kind reports that the source was not found."
+      - id: c
+        text: "`kind: Kustomization` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`kind: GitRepository` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The kind must match the real object. A wrong kind reports that the source was not found."

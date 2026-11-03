@@ -24,8 +24,8 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | GitOps Principles And The Reconciliation Loop | 1 | 1 + capstone | GitOps principles |
-| [020](sections/section-020) | The GitOps Toolkit Architecture | 1 | 1 + capstone | GitOps Toolkit |
+| [010](sections/section-010) | GitOps Principles And The Reconciliation Loop | 2 | 2 + capstone | GitOps principles |
+| [020](sections/section-020) | The GitOps Toolkit Architecture | 3 | 3 + capstone | GitOps Toolkit |
 | [030](sections/section-030) | Bootstrapping Flux | 1 | 1 + capstone | Bootstrap |
 
 The order goes from use to installation. Section 010 starts with what Flux
@@ -41,7 +41,10 @@ makes sense once you know what it installs.
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
 | 010-01 | [Reconcile A Cluster From Git With Flux](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [The Reconciliation Loop In Depth](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
 | 020-01 | [Find Your Way Around The GitOps Toolkit](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Source Controller And Artifacts](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 020-03 | [Kustomize Controller In Depth](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
 | 030-01 | [Bootstrap Flux From A Git Repository](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
 
 ---

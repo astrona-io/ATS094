@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unreviewed
+  namespace: podinfo
+  labels:
+    app: unreviewed
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unreviewed
+  template:
+    metadata:
+      labels:
+        app: unreviewed
+    spec:
+      containers:
+        - name: unreviewed
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          ports:
+            - name: http
+              containerPort: 9898

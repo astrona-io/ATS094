@@ -18,7 +18,7 @@ This section takes Flux apart. You see which controller owns which API, how a so
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
+The section has three modules. The first has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
 
 ### 1. Find Your Way Around The GitOps Toolkit
 
@@ -28,6 +28,22 @@ The module starts at its landing page, which also launches the playground. The p
 2. The Flux CLI Against The Controllers
 3. Choosing Components, followed by the lab **Add The Image Automation Controllers**
 4. Summary
+
+### 2. Source Controller And Artifacts
+
+1. Artifacts And The Source Status
+2. GitRepository References, Include And Ignore
+3. Authentication For Git Sources, followed by the lab **Pin The GitRepository To The Reviewed Release**
+4. OCI, Helm And Bucket Sources
+5. Summary
+
+### 3. Kustomize Controller In Depth
+
+1. Build And Overlays
+2. Patches, Images And Target Namespace
+3. Variable Substitution, followed by the lab **Fix The Variable Substitution**
+4. Service Accounts And Tenant Isolation
+5. Summary
 
 ## Section capstone: Find The Controller That Stopped Working
 

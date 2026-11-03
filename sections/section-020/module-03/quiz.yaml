@@ -1,0 +1,245 @@
+# Knowledge check for module 03 of section 020. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-020-m03
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-03
+  title: "Kustomize Controller In Depth"
+placement:
+  position: after
+  reading: sections/section-020/module-03/labs/lab-01/question.md
+questions:
+  - id: ats094-020-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain the order build, substitute, apply"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-overlays.md
+    prompt: "In which order does kustomize-controller handle a Flux `Kustomization`?"
+    options:
+      - id: a
+        text: "Build the folder, substitute variables, then apply."
+        explanation: "Correct. The controller builds the manifests, replaces variables in the result, and applies last."
+      - id: b
+        text: "Apply, then build, then substitute."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Substitute, then apply, then build."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Build, apply, then substitute."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The controller builds the manifests, replaces variables in the result, and applies last."
+
+  - id: ats094-020-m03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Build a folder without kustomization.yaml"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-overlays.md
+    prompt: "A folder in `spec.path` has no `kustomization.yaml`. What does the controller do?"
+    options:
+      - id: a
+        text: "It refuses to build and reports an error."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It applies only the first file in the folder."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It copies the folder from the previous revision."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It generates one that lists every YAML file in the folder and its subfolders."
+        explanation: "Correct. Without the file, the controller creates one so a plain folder of manifests works."
+    correct_option: d
+    explanation: "Correct. Without the file, the controller creates one so a plain folder of manifests works."
+
+  - id: ats094-020-m03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Preview with flux diff"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-overlays.md
+    prompt: "What does `flux diff kustomization` return when the built result differs from the cluster?"
+    options:
+      - id: a
+        text: "It applies the changes and exits with code 0."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It deletes the differing objects."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It prints the changes and exits with code 1."
+        explanation: "Correct. The exit code 1 lets a pipeline fail a pull request that changes the cluster."
+      - id: d
+        text: "It prints nothing and exits with code 0."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The exit code 1 lets a pipeline fail a pull request that changes the cluster."
+
+  - id: ats094-020-m03-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Locate a build error"
+    source_readings:
+      - sections/section-020/module-03/course-01-build-and-overlays.md
+    prompt: "The `Ready` message of a Flux `Kustomization` talks about a missing file in `resources`. Which step failed and where is the fix?"
+    options:
+      - id: a
+        text: "The apply step, and the fix is in the service account."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The build step, and the fix is in Git."
+        explanation: "Correct. Messages about files, patches and resources come from the build, which runs before anything is applied."
+      - id: c
+        text: "The substitute step, and the fix is in the ConfigMap."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The wait step, and the fix is in the workload."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Messages about files, patches and resources come from the build, which runs before anything is applied."
+
+  - id: ats094-020-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Patch from the Flux Kustomization"
+    source_readings:
+      - sections/section-020/module-03/course-02-patches-images-and-target-namespace.md
+    prompt: "A patch in `spec.patches` has a `target` with `kind: Deployment`. To which objects does it apply?"
+    options:
+      - id: a
+        text: "Every Deployment in the build."
+        explanation: "Correct. With a target set, the name in the patch is ignored and the patch applies to every match."
+      - id: b
+        text: "Only the Deployment with the name written in the patch."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Every object in the build."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Only the first Deployment in the folder."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. With a target set, the name in the patch is ignored and the patch applies to every match."
+
+  - id: ats094-020-m03-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Change an image without a patch"
+    source_readings:
+      - sections/section-020/module-03/course-02-patches-images-and-target-namespace.md
+    prompt: "Which field changes the tag of an image across all manifests in the build?"
+    options:
+      - id: a
+        text: "`spec.commonMetadata`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.namePrefix`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.interval`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.images` with `newTag`"
+        explanation: "Correct. The `images` list rewrites the name, tag or digest of matching containers."
+    correct_option: d
+    explanation: "Correct. The `images` list rewrites the name, tag or digest of matching containers."
+
+  - id: ats094-020-m03-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use targetNamespace"
+    source_readings:
+      - sections/section-020/module-03/course-02-patches-images-and-target-namespace.md
+    prompt: "`spec.targetNamespace` names a namespace that does not exist. What happens?"
+    options:
+      - id: a
+        text: "The controller creates the namespace and applies the objects."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The controller ignores the field."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The namespaced objects fail to apply, because the controller does not create the namespace."
+        explanation: "Correct. The field moves every namespaced object. The namespace must exist or be part of the build."
+      - id: d
+        text: "The controller applies the objects to the namespace `default`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The field moves every namespaced object. The namespace must exist or be part of the build."
+
+  - id: ats094-020-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read variables from a ConfigMap"
+    source_readings:
+      - sections/section-020/module-03/course-03-variable-substitution.md
+    prompt: "Which `substituteFrom` entry reads variables from a ConfigMap named `cluster-vars`?"
+    options:
+      - id: a
+        text: "`kind: Secret` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`kind: ConfigMap` and `name: cluster-vars`"
+        explanation: "Correct. The kind must match the real object. A wrong kind reports that the source was not found."
+      - id: c
+        text: "`kind: Kustomization` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`kind: GitRepository` and `name: cluster-vars`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The kind must match the real object. A wrong kind reports that the source was not found."
+
+  - id: ats094-020-m03-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use defaults and missing values"
+    source_readings:
+      - sections/section-020/module-03/course-03-variable-substitution.md
+    prompt: "A manifest contains `${replicas}`. No source has a value for `replicas`. What is the result?"
+    options:
+      - id: a
+        text: "The variable is replaced by an empty string."
+        explanation: "Correct. A variable without a default and without a value becomes empty. Use `${replicas:=1}` to set a default."
+      - id: b
+        text: "The apply stops with an error about the variable."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The variable is replaced by 1."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The text `${replicas}` stays in the manifest."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. A variable without a default and without a value becomes empty. Use `${replicas:=1}` to set a default."
+
+  - id: ats094-020-m03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Run a Kustomization as a service account"
+    source_readings:
+      - sections/section-020/module-03/course-04-service-accounts-and-tenant-isolation.md
+    prompt: "What does `spec.serviceAccountName` do on a Flux `Kustomization`?"
+    options:
+      - id: a
+        text: "It changes the account of the pods that the manifests create."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It gives the source access to the Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It lets the object use a service account from any namespace."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The controller applies, prunes and checks health as that account, in the namespace of the Flux `Kustomization`."
+        explanation: "Correct. Impersonation limits the apply to the rights of the account. The account must be in the same namespace."
+    correct_option: d
+    explanation: "Correct. Impersonation limits the apply to the rights of the account. The account must be in the same namespace."

@@ -1,0 +1,9 @@
+# The variables for the Flux Kustomization podinfo. They live in a ConfigMap,
+# not in a Secret.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-vars
+  namespace: flux-system
+data:
+  ui_message: "hello from cluster-vars"

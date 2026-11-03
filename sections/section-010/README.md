@@ -18,7 +18,7 @@ This section shows that rule at work with Flux. You first learn the four OpenGit
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module also has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
+The section has two modules. The first has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module also has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
 
 ### 1. Reconcile A Cluster From Git With Flux
 
@@ -28,6 +28,16 @@ The module starts at its landing page, which also launches the playground. The p
 2. Your First GitRepository And Kustomization, followed by the lab **Make Flux Apply The Application From Git**
 3. Drift Correction And Pruning
 4. Summary
+
+### 2. The Reconciliation Loop In Depth
+
+The module has its own playground. It covers what one reconcile does, intervals and health checks, dependencies, and server-side apply.
+
+1. The Reconcile Cycle And Status Conditions
+2. Intervals, Retries And Health Checks
+3. Dependencies And Ordering, followed by the lab **Fix The Apps Kustomization That Waits Forever**
+4. Server-Side Apply And Finding What Manages An Object
+5. Summary
 
 ## Section capstone: Make Git The Only Source Of Truth
 

@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+# OS prep for the "Kustomize Controller In Depth" playground (`ats-094-playground-020-03`).
+#
+# Environment preparation only. There is no task and no grading. This script:
+#   1. puts the Flux CLI (pinned) on the PATH,
+#   2. starts Gitea and makes gitea.localtest.me resolve to it inside the cluster,
+#   3. creates the Gitea user gitops and the repository gitops/fleet,
+#   4. seeds the repository with the podinfo application,
+#   5. installs the Flux controllers with `flux install` (no Git sync yet).
+set -euo pipefail
+# grep -q stops reading at the first match; under pipefail the command
+# writing into the pipe then fails with SIGPIPE and a match looks like a
+# failure. This wrapper reads all input instead and keeps grep's exit status.
+grep() {
+  local arg quiet=0 args=()
+  for arg in "$@"; do
+    case "$arg" in
+      --quiet|--silent) quiet=1 ;;
+      --*) args+=("$arg") ;;
+      -*q*) quiet=1; [ "$arg" = "-q" ] || args+=("${arg//q/}") ;;
+      *) args+=("$arg") ;;
+    esac
+  done
+  if [ "$quiet" = 1 ]; then command grep "${args[@]}" >/dev/null; else command grep "$@"; fi
+}
+
+FLUX_VERSION="2.9.6"
+GIT_HOST="gitea.localtest.me"
+GIT_USER="gitops"
+GIT_PASSWORD="gitops-password"
+REPO="fleet"
+
+BIN_DIR="/usr/local/bin"
+[ -w "$BIN_DIR" ] || BIN_DIR="$HOME/.local/bin"
+mkdir -p "$BIN_DIR"
+export PATH="$BIN_DIR:$PATH"
+
+# Pin the version rather than accepting whatever flux happens to be on the
+# machine: the CLI installs controllers of its own version, and the course is
+# written against ${FLUX_VERSION}.
+have_version=""
+command -v flux >/dev/null 2>&1 && \
+  have_version=$(flux version --client 2>/dev/null | awk '/flux:/{print $2}' | sed 's/^v//')
+if [ "$have_version" != "$FLUX_VERSION" ]; then
+  OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
+  ARCH="$(uname -m)"
+  case "$ARCH" in x86_64) ARCH=amd64 ;; aarch64|arm64) ARCH=arm64 ;; esac
+  WORK="$(mktemp -d)"
+  trap 'rm -rf "$WORK"' EXIT
+  echo "[playground] Downloading Flux CLI ${FLUX_VERSION} (${OS}/${ARCH})..."
+  curl -fsSL "https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_${OS}_${ARCH}.tar.gz" \
+    | tar -xz -C "$WORK" flux
+  install -m 0755 "$WORK/flux" "$BIN_DIR/flux"
+fi
+flux version --client
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MANIFEST_DIR=""
+for candidate in "$SCRIPT_DIR/../manifests" "./manifests" "$SCRIPT_DIR/manifests"; do
+  [ -d "$candidate" ] && { MANIFEST_DIR="$candidate"; break; }
+done
+
+# lab-start.yaml is also listed under bootstrap.manifests in config.yaml, so it
+# may already be applied. kubectl apply is idempotent.
+echo "[playground] Applying Gitea and the tester pod..."
+kubectl apply -f "$MANIFEST_DIR/lab-start.yaml"
+kubectl -n gitea rollout status deployment/gitea --timeout=300s
+kubectl -n gitea rollout status deployment/tester --timeout=300s
+
+# One Git address for the reader's machine and the cluster: gitea.localtest.me
+# resolves to 127.0.0.1 on the machine (reached through a port-forward), and
+# this CoreDNS rewrite sends the same name to the Gitea Service in the cluster.
+if ! kubectl -n kube-system get configmap coredns -o jsonpath='{.data.Corefile}' | grep -q "$GIT_HOST"; then
+  echo "[playground] Adding the CoreDNS rewrite for ${GIT_HOST}..."
+  # The answer is rewritten back to the asked name: Go programs such as the
+  # Flux controllers ignore DNS answers whose name differs from the question.
+  COREFILE="$(kubectl -n kube-system get configmap coredns -o jsonpath='{.data.Corefile}' \
+    | awk '/^[[:space:]]*kubernetes / && !done {
+        print "    rewrite stop {"
+        print "        name regex gitea\\.localtest\\.me gitea-http.gitea.svc.cluster.local"
+        print "        answer name gitea-http\\.gitea\\.svc\\.cluster\\.local gitea.localtest.me"
+        print "    }"
+        done=1
+      } {print}')"
+  kubectl -n kube-system create configmap coredns --from-literal=Corefile="$COREFILE" \
+    --dry-run=client -o yaml | kubectl apply -f -
+  kubectl -n kube-system rollout restart deployment/coredns
+  kubectl -n kube-system rollout status deployment/coredns --timeout=120s
+fi
+
+gitea_api() {
+  # gitea_api METHOD PATH [JSON]: calls the Gitea API from the tester pod.
+  local method="$1" path="$2" body="${3:-}"
+  if [ -n "$body" ]; then
+    printf '%s' "$body" | kubectl -n gitea exec -i deploy/tester -- \
+      curl -fsS -u "$GIT_USER:$GIT_PASSWORD" -X "$method" -H 'Content-Type: application/json' \
+      --data-binary @- "http://gitea-http.gitea:3000/api/v1$path"
+  else
+    kubectl -n gitea exec deploy/tester -- \
+      curl -fsS -u "$GIT_USER:$GIT_PASSWORD" -X "$method" "http://gitea-http.gitea:3000/api/v1$path"
+  fi
+}
+
+seed_file() {
+  # seed_file LOCAL_FILE REPO_PATH: commits one file to gitops/fleet on main.
+  local content
+  content="$(base64 < "$1" | tr -d '\n')"
+  gitea_api POST "/repos/$GIT_USER/$REPO/contents/$2" \
+    "{\"content\":\"$content\",\"message\":\"Add $2\",\"branch\":\"main\"}" >/dev/null
+}
+
+echo "[playground] Creating the Gitea user ${GIT_USER} and the repository ${GIT_USER}/${REPO}..."
+# Gitea can refuse the first commands while it finishes starting, so retry
+# until the user exists; fail here rather than later at the first clone.
+gitea_user_ready=false
+for _ in $(seq 1 30); do
+  kubectl -n gitea exec deploy/gitea -- gitea admin user create \
+    --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
+    --admin --must-change-password=false >/dev/null 2>&1 && { gitea_user_ready=true; break; }
+  kubectl -n gitea exec deploy/gitea -- gitea admin user list 2>/dev/null \
+    | awk 'NR > 1 {print $2}' | grep -x "$GIT_USER" >/dev/null && { gitea_user_ready=true; break; }
+  sleep 2
+done
+[ "$gitea_user_ready" = true ] || { echo "ERROR: could not create the Gitea user $GIT_USER." >&2; exit 1; }
+gitea_api GET "/repos/$GIT_USER/$REPO" >/dev/null 2>&1 || \
+  gitea_api POST "/user/repos" "{\"name\":\"$REPO\",\"auto_init\":true,\"default_branch\":\"main\",\"private\":true}" >/dev/null
+
+echo "[playground] Seeding the repository with the podinfo application..."
+SEED_DIR="$MANIFEST_DIR/repo"
+if gitea_api GET "/repos/$GIT_USER/$REPO/contents/apps/podinfo/kustomization.yaml" >/dev/null 2>&1; then
+  echo "[playground] Repository already seeded."
+else
+  (cd "$SEED_DIR" && find . -type f | sed 's|^\./||') | while read -r file; do
+    seed_file "$SEED_DIR/$file" "$file"
+  done
+fi
+
+echo "[playground] Installing the Flux controllers..."
+flux install
+flux check
+
+echo "[playground] Ready."
+kubectl -n flux-system get pods
+echo "[playground] Start the port-forward in a second terminal before you use git:"
+echo "  kubectl -n gitea port-forward svc/gitea-http 3000:3000"

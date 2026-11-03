@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: templated
+  namespace: templated
+  labels:
+    app: templated
+spec:
+  replicas: ${replicas:=1}
+  selector:
+    matchLabels:
+      app: templated
+  template:
+    metadata:
+      labels:
+        app: templated
+    spec:
+      containers:
+        - name: templated
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: "${ui_message:=no message set}"
+          ports:
+            - name: http
+              containerPort: 9898
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http

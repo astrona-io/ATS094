@@ -1,0 +1,245 @@
+# Knowledge check for module 02 of section 020. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-020-m02
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-02
+  title: "Source Controller And Artifacts"
+placement:
+  position: after
+  reading: sections/section-020/module-02/labs/lab-01/question.md
+questions:
+  - id: ats094-020-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Describe an artifact"
+    source_readings:
+      - sections/section-020/module-02/course-01-artifacts-and-the-source-status.md
+    prompt: "What is an artifact in source-controller?"
+    options:
+      - id: a
+        text: "A tar.gz archive of the files of one revision, served over HTTP inside the cluster."
+        explanation: "Correct. An artifact is an archive of one revision. The other controllers download it from source-controller."
+      - id: b
+        text: "A container image that runs the application."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "A custom resource that lists the pods of an application."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "A Git branch that source-controller creates."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. An artifact is an archive of one revision. The other controllers download it from source-controller."
+
+  - id: ats094-020-m02-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read status.artifact"
+    source_readings:
+      - sections/section-020/module-02/course-01-artifacts-and-the-source-status.md
+    prompt: "Which field of `status.artifact` tells you which commit a `GitRepository` currently holds?"
+    options:
+      - id: a
+        text: "`path`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`size`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`lastUpdateTime`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`revision`"
+        explanation: "Correct. The revision has the form reference@sha1:commit for Git."
+    correct_option: d
+    explanation: "Correct. The revision has the form reference@sha1:commit for Git."
+
+  - id: ats094-020-m02-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell the two suspends apart"
+    source_readings:
+      - sections/section-020/module-02/course-01-artifacts-and-the-source-status.md
+    prompt: "What happens to Flux `Kustomization` objects when their `GitRepository` is suspended?"
+    options:
+      - id: a
+        text: "They are deleted."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "They stop applying and become `Stalled`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "They keep applying the last artifact on their own interval."
+        explanation: "Correct. A suspended source freezes the content. It does not stop the objects that use it."
+      - id: d
+        text: "They switch to the branch `master`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. A suspended source freezes the content. It does not stop the objects that use it."
+
+  - id: ats094-020-m02-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Follow a branch, a tag or a commit"
+    source_readings:
+      - sections/section-020/module-02/course-02-gitrepository-refs-include-and-ignore.md
+    prompt: "A `GitRepository` has no `spec.ref`. Which branch does source-controller follow?"
+    options:
+      - id: a
+        text: "`main`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`master`"
+        explanation: "Correct. Without `ref`, the branch is `master`. A repository with only `main` never becomes ready."
+      - id: c
+        text: "`develop`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The default branch of the Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Without `ref`, the branch is `master`. A repository with only `main` never becomes ready."
+
+  - id: ats094-020-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use a semantic version range"
+    source_readings:
+      - sections/section-020/module-02/course-02-gitrepository-refs-include-and-ignore.md
+    prompt: "A `GitRepository` has `ref.semver: \">=1.0.0 <2.0.0\"`. Tags `v1.2.0` and `v2.0.0` exist. Which revision does it follow?"
+    options:
+      - id: a
+        text: "The tag `v1.2.0`."
+        explanation: "Correct. source-controller selects the highest tag inside the range, so a new major version does not arrive without a change."
+      - id: b
+        text: "The tag `v2.0.0`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The newest commit of the default branch."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Both tags, in turn."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. source-controller selects the highest tag inside the range, so a new major version does not arrive without a change."
+
+  - id: ats094-020-m02-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit the artifact with ignore"
+    source_readings:
+      - sections/section-020/module-02/course-02-gitrepository-refs-include-and-ignore.md
+    prompt: "What does `spec.ignore` do on a `GitRepository`?"
+    options:
+      - id: a
+        text: "It stops source-controller from fetching on some days."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It hides the repository from other namespaces."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It ignores errors in the `Ready` condition."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It removes files that match its patterns from the artifact."
+        explanation: "Correct. `spec.ignore` uses the `.gitignore` format to limit what is stored in the artifact."
+    correct_option: d
+    explanation: "Correct. `spec.ignore` uses the `.gitignore` format to limit what is stored in the artifact."
+
+  - id: ats094-020-m02-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Create credentials for HTTP"
+    source_readings:
+      - sections/section-020/module-02/course-03-authentication-for-git-sources.md
+    prompt: "Which keys does the Secret of an HTTP basic authentication source contain?"
+    options:
+      - id: a
+        text: "`identity` and `known_hosts`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`ca.crt` and `tls.key`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`username` and `password`"
+        explanation: "Correct. HTTP basic authentication uses `username` and `password`. For GitHub, the password is a personal access token."
+      - id: d
+        text: "`token` and `url`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. HTTP basic authentication uses `username` and `password`. For GitHub, the password is a personal access token."
+
+  - id: ats094-020-m02-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Create credentials for SSH"
+    source_readings:
+      - sections/section-020/module-02/course-03-authentication-for-git-sources.md
+    prompt: "Which Secret key does an SSH source need besides the private key?"
+    options:
+      - id: a
+        text: "`password`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`known_hosts`, so source-controller can check the server."
+        explanation: "Correct. The private key is `identity`. Without `known_hosts`, SSH sources refuse to connect."
+      - id: c
+        text: "`ca.crt`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`bearerToken`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The private key is `identity`. Without `known_hosts`, SSH sources refuse to connect."
+
+  - id: ats094-020-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diagnose a missing Secret"
+    source_readings:
+      - sections/section-020/module-02/course-03-authentication-for-git-sources.md
+    prompt: "The `Ready` message of a `GitRepository` says that the Secret `fleet-credentials` was not found. What is the likely fix?"
+    options:
+      - id: a
+        text: "Correct `spec.secretRef.name` to a Secret that exists in the same namespace."
+        explanation: "Correct. A `secretRef` names a Secret in the namespace of the source. A wrong name stops the clone before it starts."
+      - id: b
+        text: "Increase `spec.timeout`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Change `spec.ref` to a tag."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Suspend and resume the source."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. A `secretRef` names a Secret in the namespace of the source. A wrong name stops the clone before it starts."
+
+  - id: ats094-020-m02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose between OCI, Helm and Bucket"
+    source_readings:
+      - sections/section-020/module-02/course-04-oci-helm-and-bucket-sources.md
+    prompt: "Which source kind makes source-controller pull manifests that a pipeline stored in a container registry?"
+    options:
+      - id: a
+        text: "`Bucket`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`HelmChart`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`GitRepository`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`OCIRepository`"
+        explanation: "Correct. An `OCIRepository` pulls an OCI artifact from a registry. The `oci://` URL has no tag; the version goes in `ref`."
+    correct_option: d
+    explanation: "Correct. An `OCIRepository` pulls an OCI artifact from a registry. The `oci://` URL has no tag; the version goes in `ref`."

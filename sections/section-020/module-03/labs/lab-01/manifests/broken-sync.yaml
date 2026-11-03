@@ -1,0 +1,38 @@
+# The starting Flux objects for ats-094-lab-020-03. Both apply without an error
+# and the Flux Kustomization is wrong in two ways:
+#   - substituteFrom reads the variables from a Secret named cluster-vars, but
+#     they are in a ConfigMap named cluster-vars;
+#   - targetNamespace moves every namespaced object into `staging`, a namespace
+#     that does not exist; the application belongs in `podinfo`.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./apps/podinfo
+  prune: true
+  wait: true
+  timeout: 2m
+  targetNamespace: staging
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-vars

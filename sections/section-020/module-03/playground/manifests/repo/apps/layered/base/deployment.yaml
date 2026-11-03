@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: layered
+  namespace: layered
+  labels:
+    app: layered
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: layered
+  template:
+    metadata:
+      labels:
+        app: layered
+    spec:
+      containers:
+        - name: layered
+          image: ghcr.io/stefanprodan/podinfo:6.15.0
+          env:
+            - name: PODINFO_UI_MESSAGE
+              value: "base"
+          ports:
+            - name: http
+              containerPort: 9898
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
