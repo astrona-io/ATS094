@@ -1,0 +1,219 @@
+# Final domain knowledge check across all three sections.
+schema_version: 1
+kind: question_bank
+id: ats094-final
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: domain
+  id: fundamentals-and-gitops-toolkit-architecture
+  title: "Fundamentals And GitOps Toolkit Architecture"
+questions:
+  - id: ats094-final-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell pull-based from push-based delivery"
+    source_readings:
+      - sections/section-010/module-01/course-01-gitops-principles-and-pull-based-delivery.md
+    prompt: "In pull-based delivery, which component applies the desired state to the cluster?"
+    options:
+      - id: a
+        text: "A CI job outside the cluster that runs `kubectl apply` after each commit."
+        explanation: "Not correct. That describes push-based delivery."
+      - id: b
+        text: "The Git server, which sends the files to the API server."
+        explanation: "Not correct. The Git server only stores the repository."
+      - id: c
+        text: "An agent inside the cluster, such as the Flux controllers, which fetches the desired state from Git."
+        explanation: "Correct. In pull-based delivery the agent in the cluster fetches and applies."
+      - id: d
+        text: "The `flux` command-line tool, which stays connected to the cluster."
+        explanation: "Not correct. The `flux` tool creates and reads objects. The controllers do the work."
+    correct_option: c
+    explanation: "Correct. In pull-based delivery the agent in the cluster fetches and applies."
+
+  - id: ats094-final-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default branch behavior"
+    source_readings:
+      - sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+    prompt: "A `GitRepository` has no `ref` field and the repository has only the branch `main`. What happens?"
+    options:
+      - id: a
+        text: "source-controller follows `master`, so the `GitRepository` never becomes ready."
+        explanation: "Correct. Without `ref`, the default branch is `master`."
+      - id: b
+        text: "source-controller follows `main`, because it is the only branch."
+        explanation: "Not correct. Flux does not pick the only branch for you."
+      - id: c
+        text: "source-controller follows the branch of the newest commit."
+        explanation: "Not correct. Flux does not look for the newest branch."
+      - id: d
+        text: "kustomize-controller fills in the branch from its own `path`."
+        explanation: "Not correct. kustomize-controller does not set the branch of a source."
+    correct_option: a
+    explanation: "Correct. Without `ref`, the default branch is `master`."
+
+  - id: ats094-final-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain drift correction"
+    source_readings:
+      - sections/section-010/module-01/course-03-drift-correction-and-pruning.md
+    prompt: "Someone runs `kubectl scale` on a Deployment that a Flux `Kustomization` manages with the default settings. What happens at the next reconciliation?"
+    options:
+      - id: a
+        text: "Flux keeps the manual value and updates the file in Git to match."
+        explanation: "Not correct. Flux never writes to Git when it applies a folder."
+      - id: b
+        text: "Flux keeps the manual value until the next commit."
+        explanation: "Not correct. Drift is corrected without a new commit."
+      - id: c
+        text: "Flux deletes the Deployment and creates it again."
+        explanation: "Not correct. Flux applies the changes to the existing object."
+      - id: d
+        text: "kustomize-controller applies the folder again and the replica count returns to the value in Git."
+        explanation: "Correct. Applying the folder resets every field Flux owns."
+    correct_option: d
+    explanation: "Correct. Applying the folder resets every field Flux owns."
+
+  - id: ats094-final-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match a kind to its controller"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "Which controller owns the kind `HelmRelease`?"
+    options:
+      - id: a
+        text: "source-controller, in the API group `source.toolkit.fluxcd.io`."
+        explanation: "Not correct. source-controller owns the source kinds such as `GitRepository`."
+      - id: b
+        text: "helm-controller, in the API group `helm.toolkit.fluxcd.io`."
+        explanation: "Correct. Each API group belongs to one controller."
+      - id: c
+        text: "kustomize-controller, in the API group `kustomize.toolkit.fluxcd.io`."
+        explanation: "Not correct. kustomize-controller owns the Flux `Kustomization`."
+      - id: d
+        text: "notification-controller, in the API group `notification.toolkit.fluxcd.io`."
+        explanation: "Not correct. notification-controller owns `Provider`, `Alert` and `Receiver`."
+    correct_option: b
+    explanation: "Correct. Each API group belongs to one controller."
+
+  - id: ats094-final-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what the flux tool is"
+    source_readings:
+      - sections/section-020/module-01/course-02-flux-cli-against-the-controllers.md
+    prompt: "What is the `flux` command-line tool in relation to the controllers?"
+    options:
+      - id: a
+        text: "A program that applies manifests to the cluster instead of the controllers."
+        explanation: "Not correct. Flux works without the tool."
+      - id: b
+        text: "A proxy that every request to a controller must pass through."
+        explanation: "Not correct. The tool never talks to a controller directly."
+      - id: c
+        text: "A required component, because the controllers stop without it."
+        explanation: "Not correct. A cluster managed by Flux never needs the tool."
+      - id: d
+        text: "A client of the Kubernetes API that creates and reads custom resources. The controllers do the work."
+        explanation: "Correct. It uses your kubeconfig like `kubectl`."
+    correct_option: d
+    explanation: "Correct. It uses your kubeconfig like `kubectl`."
+
+  - id: ats094-final-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the safe flag to add a component"
+    source_readings:
+      - sections/section-020/module-01/course-03-choosing-components.md
+    prompt: "You want to add the two image controllers and keep the four default controllers. Which flag do you use with `flux install`?"
+    options:
+      - id: a
+        text: "`--components`"
+        explanation: "Not correct. It replaces the default list with the one you give."
+      - id: b
+        text: "`--export`"
+        explanation: "Not correct. It prints the manifests and installs nothing."
+      - id: c
+        text: "`--components-extra`"
+        explanation: "Correct. It adds components to the default list."
+      - id: d
+        text: "`--components-default`"
+        explanation: "Not correct. This flag does not exist."
+    correct_option: c
+    explanation: "Correct. It adds components to the default list."
+
+  - id: ats094-final-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Compare flux install and flux bootstrap"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Which statement about `flux bootstrap` is correct?"
+    options:
+      - id: a
+        text: "It installs the controllers, commits their manifests to Git and connects Flux to that repository."
+        explanation: "Correct. `flux install` only installs the controllers."
+      - id: b
+        text: "It installs the controllers and writes nothing to Git."
+        explanation: "Not correct. That describes `flux install`."
+      - id: c
+        text: "It only creates the `GitRepository`, and the controllers must already exist."
+        explanation: "Not correct. Bootstrap installs the controllers too."
+      - id: d
+        text: "It installs the controllers and deletes the Git repository after the first sync."
+        explanation: "Not correct. The cluster keeps following the repository."
+    correct_option: a
+    explanation: "Correct. `flux install` only installs the controllers."
+
+  - id: ats094-final-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right bootstrap command"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Which command works with any Git server over SSH or HTTPS, but does not create the repository for you?"
+    options:
+      - id: a
+        text: "`flux bootstrap github`"
+        explanation: "Not correct. It is for GitHub and can create the repository."
+      - id: b
+        text: "`flux bootstrap git`"
+        explanation: "Correct. Only provider commands talk to a provider API."
+      - id: c
+        text: "`flux bootstrap gitlab`"
+        explanation: "Not correct. It is for GitLab and can create the project."
+      - id: d
+        text: "`flux install`"
+        explanation: "Not correct. It does not use a Git server at all."
+    correct_option: b
+    explanation: "Correct. Only provider commands talk to a provider API."
+
+  - id: ats094-final-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know where the Git credential lives"
+    source_readings:
+      - sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
+    prompt: "Where does the credential that source-controller uses to read the repository live?"
+    options:
+      - id: a
+        text: "In `gotk-sync.yaml`, committed to the repository."
+        explanation: "Not correct. A credential in Git could be read by everyone who reads the repository."
+      - id: b
+        text: "In the Secret `flux-system` in the namespace `flux-system`, not in Git."
+        explanation: "Correct. The `GitRepository` refers to it by name in `spec.secretRef`."
+      - id: c
+        text: "In `gotk-components.yaml`, inside the controller Deployments."
+        explanation: "Not correct. That file holds the controllers, not the credential."
+      - id: d
+        text: "In the kubeconfig on the machine that ran bootstrap."
+        explanation: "Not correct. The kubeconfig does not hold the Git credential."
+    correct_option: b
+    explanation: "Correct. The `GitRepository` refers to it by name in `spec.secretRef`."

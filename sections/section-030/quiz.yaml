@@ -1,0 +1,245 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats094-030
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-030
+  title: "Bootstrapping Flux"
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+  - id: ats094-030-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Compare flux install and flux bootstrap"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Which statement about `flux bootstrap` is correct?"
+    options:
+      - id: a
+        text: "It installs the controllers, commits their manifests to Git and connects Flux to that repository."
+        explanation: "Correct. `flux install` only installs the controllers."
+      - id: b
+        text: "It installs the controllers and writes nothing to Git."
+        explanation: "Not correct. That describes `flux install`."
+      - id: c
+        text: "It only creates the `GitRepository`, and the controllers must already exist."
+        explanation: "Not correct. Bootstrap installs the controllers too."
+      - id: d
+        text: "It installs the controllers and deletes the Git repository after the first sync."
+        explanation: "Not correct. The cluster keeps following the repository."
+    correct_option: a
+    explanation: "Correct. `flux install` only installs the controllers."
+
+  - id: ats094-030-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the three files that bootstrap writes"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Which files does bootstrap write under `<path>/flux-system`?"
+    options:
+      - id: a
+        text: "`gotk-controllers.yaml`, `gotk-secret.yaml` and `kustomization.yaml`."
+        explanation: "Not correct. Bootstrap does not commit a Secret and has no `gotk-controllers.yaml`."
+      - id: b
+        text: "`flux.yaml`, `sync.yaml` and `values.yaml`."
+        explanation: "Not correct. These file names are not used by bootstrap."
+      - id: c
+        text: "`gotk-components.yaml` and `gotk-sync.yaml` only."
+        explanation: "Not correct. The Kustomize file `kustomization.yaml` is written too."
+      - id: d
+        text: "`gotk-components.yaml`, `gotk-sync.yaml` and `kustomization.yaml`."
+        explanation: "Correct. These are the three files, and each has one job."
+    correct_option: d
+    explanation: "Correct. These are the three files, and each has one job."
+
+  - id: ats094-030-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain how Flux manages itself"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Why can you upgrade Flux with a commit on a bootstrapped cluster?"
+    options:
+      - id: a
+        text: "The controllers poll the Flux release page and update themselves."
+        explanation: "Not correct. Flux does not check release pages."
+      - id: b
+        text: "The `flux-system` Kustomization applies `gotk-components.yaml` from Git, so a newer file means newer controllers."
+        explanation: "Correct. Flux applies its own controllers from Git."
+      - id: c
+        text: "The Git server runs `flux install` after every commit."
+        explanation: "Not correct. The Git server does not run Flux commands."
+      - id: d
+        text: "The Secret `flux-system` stores the version of the controllers."
+        explanation: "Not correct. The Secret stores the Git credential."
+    correct_option: b
+    explanation: "Correct. Flux applies its own controllers from Git."
+
+  - id: ats094-030-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose the right bootstrap command"
+    source_readings:
+      - sections/section-030/module-01/course-01-what-flux-bootstrap-does.md
+    prompt: "Which command works with any Git server over SSH or HTTPS, but does not create the repository for you?"
+    options:
+      - id: a
+        text: "`flux bootstrap github`"
+        explanation: "Not correct. It is for GitHub and can create the repository."
+      - id: b
+        text: "`flux bootstrap gitlab`"
+        explanation: "Not correct. It is for GitLab and can create the project."
+      - id: c
+        text: "`flux bootstrap git`"
+        explanation: "Correct. Only provider commands talk to a provider API."
+      - id: d
+        text: "`flux install`"
+        explanation: "Not correct. It does not use a Git server at all."
+    correct_option: c
+    explanation: "Correct. Only provider commands talk to a provider API."
+
+  - id: ats094-030-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the path for a bootstrap"
+    source_readings:
+      - sections/section-030/module-01/course-02-bootstrapping-a-kind-cluster.md
+    prompt: "You bootstrap with `--path=clusters/kind`. Where does bootstrap write the Flux manifests?"
+    options:
+      - id: a
+        text: "In `clusters/kind/flux-system`."
+        explanation: "Correct. The folder `flux-system` is created under the path."
+      - id: b
+        text: "In `clusters/kind` directly, with no subfolder."
+        explanation: "Not correct. Bootstrap always uses a `flux-system` folder under the path."
+      - id: c
+        text: "In `apps/flux-system`."
+        explanation: "Not correct. The folder sits under the path you chose."
+      - id: d
+        text: "Only in the cluster. Nothing is written to Git."
+        explanation: "Not correct. Bootstrap commits and pushes the manifests."
+    correct_option: a
+    explanation: "Correct. The folder `flux-system` is created under the path."
+
+  - id: ats094-030-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Deploy an application through Git"
+    source_readings:
+      - sections/section-030/module-01/course-02-bootstrapping-a-kind-cluster.md
+    prompt: "After bootstrap, how do you deploy `podinfo` the GitOps way?"
+    options:
+      - id: a
+        text: "Run `kubectl apply` on the files in `apps/podinfo`."
+        explanation: "Not correct. That bypasses Git and Flux."
+      - id: b
+        text: "Commit a Flux `Kustomization` for `./apps/podinfo` to a file under `clusters/kind` and push."
+        explanation: "Correct. The `flux-system` Kustomization applies everything under that path."
+      - id: c
+        text: "Run `flux install` again with the application name."
+        explanation: "Not correct. `flux install` manages controllers, not applications."
+      - id: d
+        text: "Save the Flux `Kustomization` in `apps/podinfo`."
+        explanation: "Not correct. That folder is not under the synced path, so nothing applies it."
+    correct_option: b
+    explanation: "Correct. The `flux-system` Kustomization applies everything under that path."
+
+  - id: ats094-030-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the bootstrap flags"
+    source_readings:
+      - sections/section-030/module-01/course-02-bootstrapping-a-kind-cluster.md
+    prompt: "Why does the lab bootstrap command use `--token-auth=true`?"
+    options:
+      - id: a
+        text: "It encrypts the Secret `flux-system` with a token."
+        explanation: "Not correct. The flag chooses the kind of Git credential."
+      - id: b
+        text: "It lets Flux write to the repository without a credential."
+        explanation: "Not correct. Flux still needs a credential."
+      - id: c
+        text: "It makes Flux use the user and password over HTTP instead of generating an SSH key."
+        explanation: "Correct. The Gitea server in the lab has SSH turned off."
+      - id: d
+        text: "It allows plain HTTP without TLS."
+        explanation: "Not correct. That is `--allow-insecure-http=true`."
+    correct_option: c
+    explanation: "Correct. The Gitea server in the lab has SSH turned off."
+
+  - id: ats094-030-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know where the Git credential lives"
+    source_readings:
+      - sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
+    prompt: "Where does the credential that source-controller uses to read the repository live?"
+    options:
+      - id: a
+        text: "In `gotk-sync.yaml`, committed to the repository."
+        explanation: "Not correct. A credential in Git could be read by everyone who reads the repository."
+      - id: b
+        text: "In `gotk-components.yaml`, inside the controller Deployments."
+        explanation: "Not correct. That file holds the controllers, not the credential."
+      - id: c
+        text: "In the kubeconfig on the machine that ran bootstrap."
+        explanation: "Not correct. The kubeconfig does not hold the Git credential."
+      - id: d
+        text: "In the Secret `flux-system` in the namespace `flux-system`, not in Git."
+        explanation: "Correct. The `GitRepository` refers to it by name in `spec.secretRef`."
+    correct_option: d
+    explanation: "Correct. The `GitRepository` refers to it by name in `spec.secretRef`."
+
+  - id: ats094-030-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare token and SSH authentication"
+    source_readings:
+      - sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
+    prompt: "Which keys does the Secret `flux-system` hold when a `GitRepository` uses SSH?"
+    options:
+      - id: a
+        text: "`identity`, `identity.pub` and `known_hosts`."
+        explanation: "Correct. The private key, the public key and the server host key."
+      - id: b
+        text: "`username` and `password`."
+        explanation: "Not correct. These are the keys of token authentication."
+      - id: c
+        text: "`token` and `ca.crt`."
+        explanation: "Not correct. These are not the keys bootstrap stores for SSH."
+      - id: d
+        text: "`deploy-key` and `host`."
+        explanation: "Not correct. These key names are not used."
+    correct_option: a
+    explanation: "Correct. The private key, the public key and the server host key."
+
+  - id: ats094-030-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Handle a rotated password"
+    source_readings:
+      - sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
+    prompt: "The Git password was rotated and nobody updated the cluster. What is the first visible effect?"
+    options:
+      - id: a
+        text: "kustomize-controller deletes everything it applied."
+        explanation: "Not correct. It keeps the last artifact and the objects."
+      - id: b
+        text: "The controllers in `flux-system` restart in a loop."
+        explanation: "Not correct. The controllers keep running."
+      - id: c
+        text: "The `GitRepository` stops being `Ready`, while the Kustomizations stay `Ready` on the last artifact."
+        explanation: "Correct. New commits no longer arrive, which can go unnoticed."
+      - id: d
+        text: "Git rejects the commits that Flux has already applied."
+        explanation: "Not correct. Flux only reads from Git."
+    correct_option: c
+    explanation: "Correct. New commits no longer arrive, which can go unnoticed."

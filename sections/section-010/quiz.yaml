@@ -1,0 +1,245 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats094-010
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-010
+  title: "GitOps Principles And The Reconciliation Loop"
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+  - id: ats094-010-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the four OpenGitOps principles"
+    source_readings:
+      - sections/section-010/module-01/course-01-gitops-principles-and-pull-based-delivery.md
+    prompt: "Which set lists the four OpenGitOps principles?"
+    options:
+      - id: a
+        text: "Declarative, imperative, scheduled, manual."
+        explanation: "Not correct. Imperative and manual steps are not GitOps principles."
+      - id: b
+        text: "Declarative, versioned and immutable, pulled automatically, continuously reconciled."
+        explanation: "Correct. These are the four principles in the OpenGitOps definition."
+      - id: c
+        text: "Versioned, mutable, pushed by a pipeline, applied once."
+        explanation: "Not correct. GitOps state is immutable and pulled, and it is applied continuously."
+      - id: d
+        text: "Encrypted, signed, replicated, audited."
+        explanation: "Not correct. These are good practices but not the four principles."
+    correct_option: b
+    explanation: "Correct. These are the four principles in the OpenGitOps definition."
+
+  - id: ats094-010-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Tell pull-based from push-based delivery"
+    source_readings:
+      - sections/section-010/module-01/course-01-gitops-principles-and-pull-based-delivery.md
+    prompt: "In pull-based delivery, which component applies the desired state to the cluster?"
+    options:
+      - id: a
+        text: "A CI job outside the cluster that runs `kubectl apply` after each commit."
+        explanation: "Not correct. That describes push-based delivery."
+      - id: b
+        text: "The Git server, which sends the files to the API server."
+        explanation: "Not correct. The Git server only stores the repository."
+      - id: c
+        text: "The `flux` command-line tool, which stays connected to the cluster."
+        explanation: "Not correct. The `flux` tool creates and reads objects. The controllers do the work."
+      - id: d
+        text: "An agent inside the cluster, such as the Flux controllers, which fetches the desired state from Git."
+        explanation: "Correct. In pull-based delivery the agent in the cluster fetches and applies."
+    correct_option: d
+    explanation: "Correct. In pull-based delivery the agent in the cluster fetches and applies."
+
+  - id: ats094-010-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Compare credentials and drift handling of the two delivery models"
+    source_readings:
+      - sections/section-010/module-01/course-01-gitops-principles-and-pull-based-delivery.md
+    prompt: "Which statement about pull-based delivery with Flux is correct?"
+    options:
+      - id: a
+        text: "Flux keeps its credentials inside the cluster and needs only read access to Git."
+        explanation: "Correct. No credential that can change the cluster is stored outside it."
+      - id: b
+        text: "Flux needs a credential that can change the cluster, stored in the CI system."
+        explanation: "Not correct. That is true for a push-based pipeline."
+      - id: c
+        text: "Flux finds a manual change only after the next commit."
+        explanation: "Not correct. Flux runs on a timer and does not wait for a commit."
+      - id: d
+        text: "A failed run leaves the cluster half changed until someone starts it again."
+        explanation: "Not correct. That describes a failed pipeline. Flux tries again at the next interval."
+    correct_option: a
+    explanation: "Correct. No credential that can change the cluster is stored outside it."
+
+  - id: ats094-010-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain what the two Flux objects do"
+    source_readings:
+      - sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+    prompt: "In the first Flux setup, which controller clones the branch and stores the files as an artifact?"
+    options:
+      - id: a
+        text: "kustomize-controller, which reads the Flux `Kustomization`."
+        explanation: "Not correct. kustomize-controller downloads the artifact and applies it."
+      - id: b
+        text: "source-controller, which reads the `GitRepository`."
+        explanation: "Correct. source-controller owns `GitRepository` and creates the artifact."
+      - id: c
+        text: "helm-controller, which reads the `HelmRelease`."
+        explanation: "Not correct. helm-controller installs Helm charts."
+      - id: d
+        text: "notification-controller, which reads the `Alert`."
+        explanation: "Not correct. notification-controller sends alerts."
+    correct_option: b
+    explanation: "Correct. source-controller owns `GitRepository` and creates the artifact."
+
+  - id: ats094-010-q05
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Diagnose a failing Flux Kustomization"
+    source_readings:
+      - sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+    prompt: "The `GitRepository` is `Ready`, but the Flux `Kustomization` reports a build error. What is the most likely cause?"
+    options:
+      - id: a
+        text: "The `path` in the Flux `Kustomization` points at a folder that does not exist in the artifact."
+        explanation: "Correct. A wrong `path` fails the build while the source stays `Ready`."
+      - id: b
+        text: "The `GitRepository` follows the wrong branch."
+        explanation: "Not correct. A wrong branch would make the `GitRepository` not ready."
+      - id: c
+        text: "The `GitRepository` interval is too short."
+        explanation: "Not correct. A short interval does not cause a build error."
+      - id: d
+        text: "The Secret `fleet-auth` is missing."
+        explanation: "Not correct. A missing credential would make the `GitRepository` not ready."
+    correct_option: a
+    explanation: "Correct. A wrong `path` fails the build while the source stays `Ready`."
+
+  - id: ats094-010-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know the default branch behavior"
+    source_readings:
+      - sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+    prompt: "A `GitRepository` has no `ref` field and the repository has only the branch `main`. What happens?"
+    options:
+      - id: a
+        text: "source-controller follows `main`, because it is the only branch."
+        explanation: "Not correct. Flux does not pick the only branch for you."
+      - id: b
+        text: "source-controller follows the branch of the newest commit."
+        explanation: "Not correct. Flux does not look for the newest branch."
+      - id: c
+        text: "kustomize-controller fills in the branch from its own `path`."
+        explanation: "Not correct. kustomize-controller does not set the branch of a source."
+      - id: d
+        text: "source-controller follows `master`, so the `GitRepository` never becomes ready."
+        explanation: "Correct. Without `ref`, the default branch is `master`."
+    correct_option: d
+    explanation: "Correct. Without `ref`, the default branch is `master`."
+
+  - id: ats094-010-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the fields of a Flux Kustomization"
+    source_readings:
+      - sections/section-010/module-01/course-02-first-gitrepository-and-kustomization.md
+    prompt: "What does `wait: true` change on a Flux `Kustomization`?"
+    options:
+      - id: a
+        text: "It waits for the next commit before it applies anything."
+        explanation: "Not correct. `wait` does not delay applying."
+      - id: b
+        text: "It deletes objects that left the folder in Git."
+        explanation: "Not correct. That is `prune: true`."
+      - id: c
+        text: "The object becomes `Ready` only after everything it applied is healthy."
+        explanation: "Correct. `READY True` then means the pods really run."
+      - id: d
+        text: "It sets how often the folder is applied again."
+        explanation: "Not correct. That is `interval`."
+    correct_option: c
+    explanation: "Correct. `READY True` then means the pods really run."
+
+  - id: ats094-010-q08
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Explain drift correction"
+    source_readings:
+      - sections/section-010/module-01/course-03-drift-correction-and-pruning.md
+    prompt: "Someone runs `kubectl scale` on a Deployment that a Flux `Kustomization` manages with the default settings. What happens at the next reconciliation?"
+    options:
+      - id: a
+        text: "Flux keeps the manual value and updates the file in Git to match."
+        explanation: "Not correct. Flux never writes to Git when it applies a folder."
+      - id: b
+        text: "Flux keeps the manual value until the next commit."
+        explanation: "Not correct. Drift is corrected without a new commit."
+      - id: c
+        text: "Flux deletes the Deployment and creates it again."
+        explanation: "Not correct. Flux applies the changes to the existing object."
+      - id: d
+        text: "kustomize-controller applies the folder again and the replica count returns to the value in Git."
+        explanation: "Correct. Applying the folder resets every field Flux owns."
+    correct_option: d
+    explanation: "Correct. Applying the folder resets every field Flux owns."
+
+  - id: ats094-010-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain pruning and the inventory"
+    source_readings:
+      - sections/section-010/module-01/course-03-drift-correction-and-pruning.md
+    prompt: "On which condition does kustomize-controller delete an object from the cluster when `prune` is `true`?"
+    options:
+      - id: a
+        text: "The object was created by hand in the same namespace."
+        explanation: "Not correct. Pruning never deletes objects that are not in the inventory."
+      - id: b
+        text: "The object has been unchanged for longer than the `interval`."
+        explanation: "Not correct. Age does not matter for pruning."
+      - id: c
+        text: "The object is in the inventory in `.status.inventory`, but not in the new revision."
+        explanation: "Correct. Pruning only touches objects Flux applied before."
+      - id: d
+        text: "The object has the annotation `kustomize.toolkit.fluxcd.io/reconcile: enabled`."
+        explanation: "Not correct. That annotation does not mark an object for deletion."
+    correct_option: c
+    explanation: "Correct. Pruning only touches objects Flux applied before."
+
+  - id: ats094-010-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose how to stop Flux on purpose"
+    source_readings:
+      - sections/section-010/module-01/course-03-drift-correction-and-pruning.md
+    prompt: "You want Flux to keep applying an object but never delete it. Which setting does that?"
+    options:
+      - id: a
+        text: "Setting `spec.suspend` to `true` on the Flux `Kustomization`."
+        explanation: "Not correct. That stops the whole folder, and no object is applied."
+      - id: b
+        text: "The annotation `kustomize.toolkit.fluxcd.io/prune: disabled` on the object."
+        explanation: "Correct. Flux still applies the object but never prunes it."
+      - id: c
+        text: "The annotation `kustomize.toolkit.fluxcd.io/reconcile: disabled` on the object."
+        explanation: "Not correct. That also stops applying changes to the object."
+      - id: d
+        text: "Setting `wait: false` on the Flux `Kustomization`."
+        explanation: "Not correct. `wait` does not affect pruning."
+    correct_option: b
+    explanation: "Correct. Flux still applies the object but never prunes it."

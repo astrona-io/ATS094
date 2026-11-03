@@ -1,0 +1,245 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats094-020
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: section
+  id: section-020
+  title: "The GitOps Toolkit Architecture"
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+  - id: ats094-020-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the default controllers"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "Which four controllers does `flux install` install by default?"
+    options:
+      - id: a
+        text: "source-controller, kustomize-controller, image-reflector-controller and image-automation-controller."
+        explanation: "Not correct. The two image controllers are optional."
+      - id: b
+        text: "source-controller, helm-controller, image-reflector-controller and notification-controller."
+        explanation: "Not correct. kustomize-controller is installed too, and the image controllers are not."
+      - id: c
+        text: "source-controller, kustomize-controller, helm-controller and notification-controller."
+        explanation: "Correct. These four are installed unless you choose other components."
+      - id: d
+        text: "kustomize-controller, helm-controller, source-watcher and notification-controller."
+        explanation: "Not correct. source-watcher is optional, and source-controller is a default."
+    correct_option: c
+    explanation: "Correct. These four are installed unless you choose other components."
+
+  - id: ats094-020-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Match a kind to its controller"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "Which controller owns the kind `HelmRelease`?"
+    options:
+      - id: a
+        text: "helm-controller, in the API group `helm.toolkit.fluxcd.io`."
+        explanation: "Correct. Each API group belongs to one controller."
+      - id: b
+        text: "source-controller, in the API group `source.toolkit.fluxcd.io`."
+        explanation: "Not correct. source-controller owns the source kinds such as `GitRepository`."
+      - id: c
+        text: "kustomize-controller, in the API group `kustomize.toolkit.fluxcd.io`."
+        explanation: "Not correct. kustomize-controller owns the Flux `Kustomization`."
+      - id: d
+        text: "notification-controller, in the API group `notification.toolkit.fluxcd.io`."
+        explanation: "Not correct. notification-controller owns `Provider`, `Alert` and `Receiver`."
+    correct_option: a
+    explanation: "Correct. Each API group belongs to one controller."
+
+  - id: ats094-020-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Separate a CRD from its controller"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "What is the role of a CustomResourceDefinition (CRD) for a Flux kind?"
+    options:
+      - id: a
+        text: "It runs the controller that reconciles the kind."
+        explanation: "Not correct. A CRD is a schema. It does not run anything."
+      - id: b
+        text: "It fetches the artifact for the kind from Git."
+        explanation: "Not correct. source-controller fetches artifacts."
+      - id: c
+        text: "It labels the objects that the controller applies."
+        explanation: "Not correct. kustomize-controller sets the labels."
+      - id: d
+        text: "It adds the kind to the Kubernetes API so the API server can store objects of that kind."
+        explanation: "Correct. The CRD lets you store an object. The controller acts on it."
+    correct_option: d
+    explanation: "Correct. The CRD lets you store an object. The controller acts on it."
+
+  - id: ats094-020-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Follow a revision between two controllers"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "Where does kustomize-controller find out that source-controller has a new artifact?"
+    options:
+      - id: a
+        text: "From a direct call that source-controller makes to kustomize-controller."
+        explanation: "Not correct. The two controllers never call each other."
+      - id: b
+        text: "In `status.artifact` of the `GitRepository`, which it watches."
+        explanation: "Correct. The controllers hand over work through the status and the artifact file."
+      - id: c
+        text: "From a webhook that the Git server sends to kustomize-controller."
+        explanation: "Not correct. kustomize-controller does not receive webhooks from Git."
+      - id: d
+        text: "From the `flux` tool, which copies the revision between the objects."
+        explanation: "Not correct. The `flux` tool is not part of this hand-over."
+    correct_option: b
+    explanation: "Correct. The controllers hand over work through the status and the artifact file."
+
+  - id: ats094-020-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Tell if Flux manages an object"
+    source_readings:
+      - sections/section-020/module-01/course-01-controllers-and-apis.md
+    prompt: "Which labels show that kustomize-controller applied an object and which Flux `Kustomization` owns it?"
+    options:
+      - id: a
+        text: "`app.kubernetes.io/name` and `app.kubernetes.io/managed-by`."
+        explanation: "Not correct. These labels are set by the application, not by kustomize-controller."
+      - id: b
+        text: "`source.toolkit.fluxcd.io/name` and `source.toolkit.fluxcd.io/revision`."
+        explanation: "Not correct. These are not the labels kustomize-controller sets."
+      - id: c
+        text: "`kustomize.toolkit.fluxcd.io/name` and `kustomize.toolkit.fluxcd.io/namespace`."
+        explanation: "Correct. They name the owning Flux `Kustomization`."
+      - id: d
+        text: "`reconcile.fluxcd.io/requestedAt` and `reconcile.fluxcd.io/interval`."
+        explanation: "Not correct. `requestedAt` is an annotation set by `flux reconcile`."
+    correct_option: c
+    explanation: "Correct. They name the owning Flux `Kustomization`."
+
+  - id: ats094-020-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Know what the flux tool is"
+    source_readings:
+      - sections/section-020/module-01/course-02-flux-cli-against-the-controllers.md
+    prompt: "What is the `flux` command-line tool in relation to the controllers?"
+    options:
+      - id: a
+        text: "A program that applies manifests to the cluster instead of the controllers."
+        explanation: "Not correct. Flux works without the tool."
+      - id: b
+        text: "A proxy that every request to a controller must pass through."
+        explanation: "Not correct. The tool never talks to a controller directly."
+      - id: c
+        text: "A required component, because the controllers stop without it."
+        explanation: "Not correct. A cluster managed by Flux never needs the tool."
+      - id: d
+        text: "A client of the Kubernetes API that creates and reads custom resources. The controllers do the work."
+        explanation: "Correct. It uses your kubeconfig like `kubectl`."
+    correct_option: d
+    explanation: "Correct. It uses your kubeconfig like `kubectl`."
+
+  - id: ats094-020-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read the right source of detail"
+    source_readings:
+      - sections/section-020/module-01/course-02-flux-cli-against-the-controllers.md
+    prompt: "`flux events` shows only a short message. Which command shows the detailed log lines of kustomize-controller about the Flux `Kustomization` `podinfo`?"
+    options:
+      - id: a
+        text: "`flux logs --kind=Kustomization --name=podinfo`"
+        explanation: "Correct. It reads the controller pod logs and filters by kind and name."
+      - id: b
+        text: "`flux tree kustomization podinfo`"
+        explanation: "Not correct. It lists the objects in the inventory."
+      - id: c
+        text: "`flux get kustomizations`"
+        explanation: "Not correct. It prints the current readiness, not log lines."
+      - id: d
+        text: "`flux create kustomization podinfo --export`"
+        explanation: "Not correct. It prints YAML and reads no logs."
+    correct_option: a
+    explanation: "Correct. It reads the controller pod logs and filters by kind and name."
+
+  - id: ats094-020-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what flux reconcile does"
+    source_readings:
+      - sections/section-020/module-01/course-02-flux-cli-against-the-controllers.md
+    prompt: "What does `flux reconcile kustomization podinfo` do?"
+    options:
+      - id: a
+        text: "It runs the reconciliation inside the `flux` tool and applies the objects itself."
+        explanation: "Not correct. The controller applies the objects."
+      - id: b
+        text: "It sets the annotation `reconcile.fluxcd.io/requestedAt` and the controller reacts to the change."
+        explanation: "Correct. The command asks a controller to run now. It does not run the reconciliation itself."
+      - id: c
+        text: "It sets `spec.suspend` to `false` and restarts the controller pod."
+        explanation: "Not correct. It does not change `spec.suspend` and does not restart a pod."
+      - id: d
+        text: "It deletes the Flux `Kustomization` and creates it again."
+        explanation: "Not correct. The object stays as it is."
+    correct_option: b
+    explanation: "Correct. The command asks a controller to run now. It does not run the reconciliation itself."
+
+  - id: ats094-020-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the safe flag to add a component"
+    source_readings:
+      - sections/section-020/module-01/course-03-choosing-components.md
+    prompt: "You want to add the two image controllers and keep the four default controllers. Which flag do you use with `flux install`?"
+    options:
+      - id: a
+        text: "`--components`"
+        explanation: "Not correct. It replaces the default list with the one you give."
+      - id: b
+        text: "`--export`"
+        explanation: "Not correct. It prints the manifests and installs nothing."
+      - id: c
+        text: "`--components-extra`"
+        explanation: "Correct. It adds components to the default list."
+      - id: d
+        text: "`--components-default`"
+        explanation: "Not correct. This flag does not exist."
+    correct_option: c
+    explanation: "Correct. It adds components to the default list."
+
+  - id: ats094-020-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Recognize the two failure signs"
+    source_readings:
+      - sections/section-020/module-01/course-03-choosing-components.md
+    prompt: "You apply an `ImageRepository` and the API server answers that it found no match for the kind. What is the cause?"
+    options:
+      - id: a
+        text: "The image-reflector-controller is installed but not ready."
+        explanation: "Not correct. Then the API server would store the object, and its status would stay empty."
+      - id: b
+        text: "The `GitRepository` has no artifact yet."
+        explanation: "Not correct. An `ImageRepository` does not depend on a `GitRepository`."
+      - id: c
+        text: "The Flux `Kustomization` is suspended."
+        explanation: "Not correct. Suspension has no effect on a kind that does not exist."
+      - id: d
+        text: "The CRD for the kind is not installed."
+        explanation: "Correct. Without the CRD the API server has no such kind and cannot store the object."
+    correct_option: d
+    explanation: "Correct. Without the CRD the API server has no such kind and cannot store the object."
