@@ -24,9 +24,9 @@ contains:
 
 | Section | Title | Modules | Labs | Topic |
 | --- | --- | --- | --- | --- |
-| [010](sections/section-010) | GitOps Principles And The Reconciliation Loop | 2 | 2 + capstone | GitOps principles |
-| [020](sections/section-020) | The GitOps Toolkit Architecture | 3 | 3 + capstone | GitOps Toolkit |
-| [030](sections/section-030) | Bootstrapping Flux | 1 | 1 + capstone | Bootstrap |
+| [010](sections/section-010) | GitOps Principles And The Reconciliation Loop | 3 | 3 + capstone | GitOps principles |
+| [020](sections/section-020) | The GitOps Toolkit Architecture | 6 | 6 + capstone | GitOps Toolkit |
+| [030](sections/section-030) | Bootstrapping Flux | 3 | 3 + capstone | Bootstrap |
 
 The order goes from use to installation. Section 010 starts with what Flux
 does for one repository. Section 020 opens Flux up into its controllers and
@@ -40,12 +40,18 @@ makes sense once you know what it installs.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Reconcile A Cluster From Git With Flux](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-01 | [Reconcile A Cluster From Git With Flux](sections/section-010/module-01/course.md) | 4 | [lab-01](sections/section-010/module-01/labs/lab-01) |
 | 010-02 | [The Reconciliation Loop In Depth](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
-| 020-01 | [Find Your Way Around The GitOps Toolkit](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 010-03 | [GitOps Terminology And Delivery Patterns](sections/section-010/module-03/course.md) | 4 | [lab-01](sections/section-010/module-03/labs/lab-01) |
+| 020-01 | [Find Your Way Around The GitOps Toolkit](sections/section-020/module-01/course.md) | 4 | [lab-01](sections/section-020/module-01/labs/lab-01) |
 | 020-02 | [Source Controller And Artifacts](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
 | 020-03 | [Kustomize Controller In Depth](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
-| 030-01 | [Bootstrap Flux From A Git Repository](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 020-04 | [Helm Controller And Releases](sections/section-020/module-04/course.md) | 4 | [lab-01](sections/section-020/module-04/labs/lab-01) |
+| 020-05 | [Notifications And Webhooks](sections/section-020/module-05/course.md) | 4 | [lab-01](sections/section-020/module-05/labs/lab-01) |
+| 020-06 | [Image Automation In Depth](sections/section-020/module-06/course.md) | 4 | [lab-01](sections/section-020/module-06/labs/lab-01) |
+| 030-01 | [Bootstrap Flux From A Git Repository](sections/section-030/module-01/course.md) | 4 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Repository Structure And Cluster Layout](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
+| 030-03 | [Upgrading, Customizing And Uninstalling Flux](sections/section-030/module-03/course.md) | 4 | [lab-01](sections/section-030/module-03/labs/lab-01) |
 
 ---
 

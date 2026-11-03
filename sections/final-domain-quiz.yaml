@@ -354,3 +354,279 @@ questions:
         explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
     correct_option: b
     explanation: "Correct. The kind must match the real object. A wrong kind reports that the source was not found."
+
+  - id: ats094-final-q17
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the objects in a Helm delivery"
+    source_readings:
+      - sections/section-020/module-04/course-01-helmrepository-helmchart-and-helmrelease.md
+    prompt: "Which object tells Flux which chart to install and with which values?"
+    options:
+      - id: a
+        text: "A `HelmRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "A `HelmRelease`."
+        explanation: "Correct. The `HelmRelease` names the chart and holds the values. The `HelmRepository` only says where charts are stored."
+      - id: c
+        text: "A `GitRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "A `Receiver`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The `HelmRelease` names the chart and holds the values. The `HelmRepository` only says where charts are stored."
+
+  - id: ats094-final-q18
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Apply the values merge order"
+    source_readings:
+      - sections/section-020/module-04/course-02-values-and-merge-order.md
+    prompt: "A `HelmRelease` has inline `values` and a `valuesFrom` entry that set the same key. Which value does the chart receive?"
+    options:
+      - id: a
+        text: "The `valuesFrom` value, because it is merged last."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Neither; Flux reports a conflict and stops."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The inline `values` value, because it is merged last."
+        explanation: "Correct. The `valuesFrom` entries are merged first in order, and the inline `values` are merged on top, so inline wins."
+      - id: d
+        text: "The chart default, because defaults always win."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The `valuesFrom` entries are merged first in order, and the inline `values` are merged on top, so inline wins."
+
+  - id: ats094-final-q19
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Connect an Alert to a Provider"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "How does an `Alert` choose where its events are sent?"
+    options:
+      - id: a
+        text: "Through `sourceRef`, which names a `GitRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Through `eventSources`, which names a webhook URL."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Through `suspend`, which names a channel."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Through `providerRef`, which names a `Provider`."
+        explanation: "Correct. The `Alert` selects events with `eventSources` and sends them to the `Provider` named in `providerRef`."
+    correct_option: d
+    explanation: "Correct. The `Alert` selects events with `eventSources` and sends them to the `Provider` named in `providerRef`."
+
+  - id: ats094-final-q20
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain what a Receiver does"
+    source_readings:
+      - sections/section-020/module-05/course-04-receivers-and-webhooks.md
+    prompt: "What does a `Receiver` do?"
+    options:
+      - id: a
+        text: "It accepts an incoming webhook and asks Flux to reconcile the listed resources."
+        explanation: "Correct. A `Receiver` exposes a webhook path. A call to it triggers reconciliation of the objects in `resources` so a change is picked up without waiting for the interval."
+      - id: b
+        text: "It sends Flux events to a chat service."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It stores Helm charts for Flux."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It scans a registry for new tags."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. A `Receiver` exposes a webhook path. A call to it triggers reconciliation of the objects in `resources` so a change is picked up without waiting for the interval."
+
+  - id: ats094-final-q21
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Select a tag with an ImagePolicy"
+    source_readings:
+      - sections/section-020/module-06/course-02-selecting-a-tag-with-imagepolicy.md
+    prompt: "Which object chooses the newest tag that matches a semver range?"
+    options:
+      - id: a
+        text: "An `ImageRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "An `ImagePolicy`."
+        explanation: "Correct. The `ImageRepository` scans tags, the `ImagePolicy` selects one, and the `ImageUpdateAutomation` writes the result to Git."
+      - id: c
+        text: "An `ImageUpdateAutomation`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "A `HelmChart`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The `ImageRepository` scans tags, the `ImagePolicy` selects one, and the `ImageUpdateAutomation` writes the result to Git."
+
+  - id: ats094-final-q22
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Mark the fields that automation updates"
+    source_readings:
+      - sections/section-020/module-06/course-03-writing-the-tag-to-git.md
+    prompt: "How does `ImageUpdateAutomation` know which field in a manifest to change?"
+    options:
+      - id: a
+        text: "It changes every field named `image`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It reads the field name from the `GitRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The field carries a setter marker comment that names the policy."
+        explanation: "Correct. The automation edits only fields that have a setter marker comment referring to an `ImagePolicy`, then commits the change to Git."
+      - id: d
+        text: "It changes only fields that the cluster reports as drifted."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The automation edits only fields that have a setter marker comment referring to an `ImagePolicy`, then commits the change to Git."
+
+  - id: ats094-final-q23
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "State the GitOps desired-state idea"
+    source_readings:
+      - sections/section-010/module-03/course-01-desired-state-actual-state-and-the-opengitops-principles.md
+    prompt: "In GitOps, where is the desired state of the system kept?"
+    options:
+      - id: a
+        text: "In the running cluster only."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In the memory of the controller."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the CI job logs."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In a versioned store such as Git."
+        explanation: "Correct. The desired state is declared and kept in a versioned, immutable store. Agents pull it and reconcile the actual state toward it."
+    correct_option: d
+    explanation: "Correct. The desired state is declared and kept in a versioned, immutable store. Agents pull it and reconcile the actual state toward it."
+
+  - id: ats094-final-q24
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Roll back with Git"
+    source_readings:
+      - sections/section-010/module-03/course-04-promotion-and-rollback.md
+    prompt: "What is the GitOps way to roll back a bad change?"
+    options:
+      - id: a
+        text: "Revert the commit in Git and let Flux reconcile."
+        explanation: "Correct. A revert in Git changes the desired state, and Flux applies it. A manual edit in the cluster would be overwritten or would leave the cluster out of line with Git."
+      - id: b
+        text: "Run `kubectl edit` on the live object."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Delete the Flux controllers."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Scale the Deployment to zero."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. A revert in Git changes the desired state, and Flux applies it. A manual edit in the cluster would be overwritten or would leave the cluster out of line with Git."
+
+  - id: ats094-final-q25
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Order Kustomizations"
+    source_readings:
+      - sections/section-030/module-02/course-03-ordering-with-dependson-and-wait.md
+    prompt: "A `Kustomization` must apply only after another one is ready. Which field expresses this?"
+    options:
+      - id: a
+        text: "`prune`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`dependsOn`."
+        explanation: "Correct. `dependsOn` makes Flux wait until the listed `Kustomization` objects are ready. Setting `wait: true` on the dependency makes readiness include the applied resources."
+      - id: c
+        text: "`interval`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`targetNamespace`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. `dependsOn` makes Flux wait until the listed `Kustomization` objects are ready. Setting `wait: true` on the dependency makes readiness include the applied resources."
+
+  - id: ats094-final-q26
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Pick a path per cluster"
+    source_readings:
+      - sections/section-030/module-02/course-04-several-clusters-from-one-repository.md
+    prompt: "How does one repository serve several clusters?"
+    options:
+      - id: a
+        text: "Each cluster uses a different Flux version."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Each cluster needs its own Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Each cluster syncs its own path, for example `./clusters/<name>`."
+        explanation: "Correct. Each cluster's `flux-system` sync points at its own folder. That folder lists what the cluster runs, often by pointing at shared bases."
+      - id: d
+        text: "Each cluster must use the same path and Flux picks by name."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Each cluster's `flux-system` sync points at its own folder. That folder lists what the cluster runs, often by pointing at shared bases."
+
+  - id: ats094-final-q27
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Uninstall Flux and keep workloads"
+    source_readings:
+      - sections/section-030/module-03/course-03-uninstalling-flux.md
+    prompt: "What does `flux uninstall` do with the workloads Flux applied?"
+    options:
+      - id: a
+        text: "It deletes all the workloads with the controllers."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It reverts the workloads to the previous Git commit."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It scales the workloads to zero."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It removes finalizers first, so the workloads stay running."
+        explanation: "Correct. The command removes Flux components and its CRDs. Finalizers are removed first so deleting the Flux objects does not delete what they applied."
+    correct_option: d
+    explanation: "Correct. The command removes Flux components and its CRDs. Finalizers are removed first so deleting the Flux objects does not delete what they applied."
+
+  - id: ats094-final-q28
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Rebuild a cluster from Git"
+    source_readings:
+      - sections/section-030/module-03/course-04-rebuilding-a-cluster-from-git.md
+    prompt: "What do you run on a new empty cluster to restore the fleet from the repository?"
+    options:
+      - id: a
+        text: "`flux bootstrap` against the same repository and path."
+        explanation: "Correct. Bootstrapping with the same repository and path installs Flux, which then reconciles everything that Git describes."
+      - id: b
+        text: "`flux uninstall` against the old cluster."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`kubectl apply` of every pod manifest by hand."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`flux suspend` on every Kustomization."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Bootstrapping with the same repository and path installs Flux, which then reconciles everything that Git describes."

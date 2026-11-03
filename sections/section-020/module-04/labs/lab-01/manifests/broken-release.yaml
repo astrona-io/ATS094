@@ -1,0 +1,36 @@
+# The starting Flux objects for ats-094-lab-020-04. Both apply without an error.
+# The HelmRelease is wrong in two ways:
+#   - the chart version range 9.x matches no podinfo chart;
+#   - the values use the key `replicas`, which the chart does not read; the
+#     chart key is `replicaCount`.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  url: https://stefanprodan.github.io/podinfo
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  releaseName: podinfo
+  targetNamespace: podinfo
+  install:
+    createNamespace: true
+  chart:
+    spec:
+      chart: podinfo
+      version: "9.x"
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+  values:
+    replicas: 2
+    ui:
+      message: "hello from helm"

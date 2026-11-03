@@ -1,0 +1,245 @@
+# Knowledge check for module 02 of section 030. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-030-m02
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-030-module-02
+  title: "Repository Structure And Cluster Layout"
+placement:
+  position: after
+  reading: sections/section-030/module-02/labs/lab-01/question.md
+questions:
+  - id: ats094-030-m02-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Compare repository layouts"
+    source_readings:
+      - sections/section-030/module-02/course-01-monorepo-or-many-repositories.md
+    prompt: "What is a main cost of a repository per environment?"
+    options:
+      - id: a
+        text: "A change must be copied between repositories, and the environments drift apart."
+        explanation: "Correct. Separate repositories give separate permissions but need the same change made twice."
+      - id: b
+        text: "Flux cannot read more than one repository."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Production files are visible to staging users."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Every change needs a new GitRepository."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Separate repositories give separate permissions but need the same change made twice."
+
+  - id: ats094-030-m02-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit what a team can apply"
+    source_readings:
+      - sections/section-030/module-02/course-01-monorepo-or-many-repositories.md
+    prompt: "A team repository must be applied with only the permissions of one account. Which field of the Flux `Kustomization` does that?"
+    options:
+      - id: a
+        text: "`spec.targetNamespace`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.sourceRef.kind`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.postBuild`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.serviceAccountName`"
+        explanation: "Correct. Flux applies the files with the permissions of the named service account."
+    correct_option: d
+    explanation: "Correct. Flux applies the files with the permissions of the named service account."
+
+  - id: ats094-030-m02-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the folders"
+    source_readings:
+      - sections/section-030/module-02/course-02-apps-infrastructure-and-clusters.md
+    prompt: "In the recommended layout, which folder holds the entry point of one cluster?"
+    options:
+      - id: a
+        text: "`apps/base`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`infrastructure/configs`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`clusters/<name>`"
+        explanation: "Correct. Each cluster follows one folder under clusters, which holds the Flux Kustomization objects for the other folders."
+      - id: d
+        text: "`flux-system/apps`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Each cluster follows one folder under clusters, which holds the Flux Kustomization objects for the other folders."
+
+  - id: ats094-030-m02-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Split infrastructure"
+    source_readings:
+      - sections/section-030/module-02/course-02-apps-infrastructure-and-clusters.md
+    prompt: "Why is `infrastructure` split into `controllers` and `configs`?"
+    options:
+      - id: a
+        text: "Flux cannot apply more than 10 files from one folder."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Custom resource definitions must exist before the objects that use them."
+        explanation: "Correct. The configs folder is applied only after the controllers folder has created the definitions."
+      - id: c
+        text: "Controllers and configs use different Git branches."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Kustomize does not accept custom resources."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The configs folder is applied only after the controllers folder has created the definitions."
+
+  - id: ats094-030-m02-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the apps overlay"
+    source_readings:
+      - sections/section-030/module-02/course-02-apps-infrastructure-and-clusters.md
+    prompt: "Which path should the Flux `Kustomization` `apps` use to run the overlay for the cluster `kind`?"
+    options:
+      - id: a
+        text: "`./apps/kind`"
+        explanation: "Correct. The base has no namespace and a different replica count. The overlay for the cluster adds both."
+      - id: b
+        text: "`./apps/base/podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`./clusters/kind/apps`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`./infrastructure/configs`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The base has no namespace and a different replica count. The overlay for the cluster adds both."
+
+  - id: ats094-030-m02-q06
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Order objects"
+    source_readings:
+      - sections/section-030/module-02/course-03-ordering-with-dependson-and-wait.md
+    prompt: "Which field makes a Flux `Kustomization` wait for another one?"
+    options:
+      - id: a
+        text: "`spec.interval`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.prune`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.suspend`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.dependsOn`"
+        explanation: "Correct. dependsOn lists the objects that must be ready first."
+    correct_option: d
+    explanation: "Correct. dependsOn lists the objects that must be ready first."
+
+  - id: ats094-030-m02-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Make Ready mean healthy"
+    source_readings:
+      - sections/section-030/module-02/course-03-ordering-with-dependson-and-wait.md
+    prompt: "Which setting makes a Flux `Kustomization` become Ready only after the objects it applied are ready?"
+    options:
+      - id: a
+        text: "`spec.force: true`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.prune: true`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.wait: true`"
+        explanation: "Correct. Without wait or healthChecks, Ready only says that the apply worked."
+      - id: d
+        text: "`spec.timeout: 0`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Without wait or healthChecks, Ready only says that the apply worked."
+
+  - id: ats094-030-m02-q08
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Debug a chain"
+    source_readings:
+      - sections/section-030/module-02/course-03-ordering-with-dependson-and-wait.md
+    prompt: "Three Flux `Kustomization` objects in a dependency chain are not ready. Where do you look first?"
+    options:
+      - id: a
+        text: "At the last object, because it is the one that users see."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "At the first object in the chain, and the message of its Ready condition."
+        explanation: "Correct. A failed object at the start blocks everything behind it, so its message names the real cause."
+      - id: c
+        text: "At the logs of the Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "At the replica count of the application."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. A failed object at the start blocks everything behind it, so its message names the real cause."
+
+  - id: ats094-030-m02-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Set a default variable"
+    source_readings:
+      - sections/section-030/module-02/course-04-several-clusters-from-one-repository.md
+    prompt: "A manifest uses `${replicas}`, and the variable may be missing. Which form gives a default of 1?"
+    options:
+      - id: a
+        text: "`${replicas:=1}`"
+        explanation: "Correct. The form name, colon, equals sign, value sets the default in the substitution."
+      - id: b
+        text: "`${replicas|1}`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`$replicas=1`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`${1:replicas}`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The form name, colon, equals sign, value sets the default in the substitution."
+
+  - id: ats094-030-m02-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose where to store cluster values"
+    source_readings:
+      - sections/section-030/module-02/course-04-several-clusters-from-one-repository.md
+    prompt: "Where do the per-cluster values for `postBuild.substituteFrom` normally live?"
+    options:
+      - id: a
+        text: "In the base folder of the repository"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In the GitRepository object"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the Flux CLI configuration"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In a ConfigMap or Secret in the cluster"
+        explanation: "Correct. The manifests stay identical in all clusters, and each cluster has its own values."
+    correct_option: d
+    explanation: "Correct. The manifests stay identical in all clusters, and each cluster has its own values."

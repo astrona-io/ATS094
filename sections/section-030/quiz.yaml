@@ -243,3 +243,49 @@ questions:
         explanation: "Not correct. Flux only reads from Git."
     correct_option: c
     explanation: "Correct. New commits no longer arrive, which can go unnoticed."
+
+  - id: ats094-030-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Repeat a bootstrap"
+    source_readings:
+      - sections/section-030/module-01/course-04-troubleshooting-a-bootstrap.md
+    prompt: "A `flux bootstrap` command stopped halfway. What is the safe next step?"
+    options:
+      - id: a
+        text: "Delete the repository and start again."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Run `flux uninstall` first and then `kubectl apply`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Run the same command again, because bootstrap is idempotent."
+        explanation: "Correct. Repeating the command completes a half-finished bootstrap without harm."
+      - id: d
+        text: "Edit the Secret flux-system by hand."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Repeating the command completes a half-finished bootstrap without harm."
+
+  - id: ats094-030-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the cause after a bootstrap"
+    source_readings:
+      - sections/section-030/module-01/course-04-troubleshooting-a-bootstrap.md
+    prompt: "The source `flux-system` is ready but the Flux `Kustomization` `flux-system` is not. Which cause fits?"
+    options:
+      - id: a
+        text: "The Git credential has expired."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The path is wrong or a file in the synced folder is invalid."
+        explanation: "Correct. A ready source means the fetch works, so the problem is in what is applied."
+      - id: c
+        text: "The controllers are not installed."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The port-forward is not running."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. A ready source means the fetch works, so the problem is in what is applied."

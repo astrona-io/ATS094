@@ -243,3 +243,49 @@ questions:
         explanation: "Correct. Without the CRD the API server has no such kind and cannot store the object."
     correct_option: d
     explanation: "Correct. Without the CRD the API server has no such kind and cannot store the object."
+
+  - id: ats094-020-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain controller permissions"
+    source_readings:
+      - sections/section-020/module-01/course-04-controller-permissions-and-tenancy.md
+    prompt: "With a default install, which rights does kustomize-controller have?"
+    options:
+      - id: a
+        text: "It can only read objects in flux-system."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It can only change objects with the Flux label."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It applies as `cluster-admin`."
+        explanation: "Correct. The binding cluster-reconciler-flux-system gives kustomize-controller and helm-controller cluster-admin."
+      - id: d
+        text: "It has no rights until a Role is created."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The binding cluster-reconciler-flux-system gives kustomize-controller and helm-controller cluster-admin."
+
+  - id: ats094-020-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Limit a tenant"
+    source_readings:
+      - sections/section-020/module-01/course-04-controller-permissions-and-tenancy.md
+    prompt: "Which field of a Flux `Kustomization` makes it apply with the permissions of a limited account?"
+    options:
+      - id: a
+        text: "`spec.targetNamespace`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.serviceAccountName`"
+        explanation: "Correct. The controller impersonates the named service account, and the API server refuses what the account may not do."
+      - id: c
+        text: "`spec.prune`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.sourceRef`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The controller impersonates the named service account, and the API server refuses what the account may not do."

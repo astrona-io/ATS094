@@ -25,7 +25,24 @@ The module starts at its landing page, which also launches the playground. The p
 1. What flux bootstrap Does
 2. Bootstrapping A Kind Cluster And Verifying It, followed by the lab **Bootstrap Flux Into A Kind Cluster**
 3. Deploy Keys, Tokens And The flux-system Secret
-4. Summary
+4. Troubleshooting A Bootstrap
+5. Summary
+
+### 2. Repository Structure And Cluster Layout
+
+1. Monorepo Or Many Repositories
+2. Apps, Infrastructure And Clusters
+3. Ordering With dependsOn And wait, followed by the lab **Wire Up The Cluster Entry Points**
+4. Several Clusters From One Repository
+5. Summary
+
+### 3. Upgrading, Customizing And Uninstalling Flux
+
+1. Upgrading Flux
+2. Customizing The Installation
+3. Uninstalling Flux, followed by the lab **Uninstall Flux And Keep The Workload**
+4. Rebuilding A Cluster From Git
+5. Summary
 
 ## Section capstone: Recover A Cluster Whose Bootstrap Broke
 

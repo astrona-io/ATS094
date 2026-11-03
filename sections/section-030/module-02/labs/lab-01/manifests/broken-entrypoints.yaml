@@ -1,0 +1,63 @@
+# The starting Flux objects for ats-094-lab-030-02. They stand in for the
+# files that a bootstrapped cluster keeps in clusters/kind. All of them apply
+# without an error, and three things are wrong:
+#   - infrastructure-controllers names a GitRepository that does not exist;
+#   - infrastructure-configs does not wait for infrastructure-controllers;
+#   - apps applies the base, not the overlay for this cluster.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-controllers
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./infrastructure/controllers
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: fleet-repo
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: infrastructure-configs
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./infrastructure/configs
+  prune: true
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: apps
+  namespace: flux-system
+spec:
+  interval: 5m
+  dependsOn:
+    - name: infrastructure-configs
+  path: ./apps/base/podinfo
+  prune: true
+  wait: true
+  timeout: 3m
+  sourceRef:
+    kind: GitRepository
+    name: fleet

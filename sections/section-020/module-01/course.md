@@ -6,7 +6,7 @@ Flux is built from the **GitOps Toolkit** (GOTK): a set of controllers and the A
 
 Keep one sentence in mind: **every Flux feature is a custom resource, and one controller owns each kind.** The `flux` command-line tool does not do the work. It reads and writes those custom resources, and the controllers in the cluster act on them.
 
-The module has three parts. **The Controllers And The APIs They Own** lists the controllers, the API group of each one, and follows one Git revision from source-controller to kustomize-controller as an artifact. **The Flux CLI Against The Controllers** shows what each `flux` command really does to the cluster, and how to do the same with `kubectl`. **Choosing Components** explains which controllers Flux installs by default, adds the optional image automation controllers, and shows what happens to an object whose kind is not installed. A graded lab follows the third part.
+The module has four parts. **The Controllers And The APIs They Own** lists the controllers, the API group of each one, and follows one Git revision from source-controller to kustomize-controller as an artifact. **The Flux CLI Against The Controllers** shows what each `flux` command really does to the cluster, and how to do the same with `kubectl`. **Choosing Components** explains which controllers Flux installs by default, adds the optional image automation controllers, and shows what happens to an object whose kind is not installed. A graded lab follows the third part. **Controller Permissions And Tenancy** shows the rights the controllers have, how to apply as a limited account, and the arguments that make that the default.
 
 ## Learning objectives
 
@@ -19,6 +19,7 @@ After this module you can:
 - Use `flux get`, `flux events`, `flux logs`, `flux tree`, `flux reconcile`, `flux suspend` and `flux resume`, and produce YAML with `--export`.
 - Add optional controllers with `flux install --components-extra` and check the result with `flux check`.
 - Explain the error you get when you apply an object whose CRD is missing.
+- Explain what permissions the Flux controllers hold and how to limit them for a tenant.
 
 ## Before you start
 

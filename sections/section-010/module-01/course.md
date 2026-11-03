@@ -6,7 +6,7 @@ Flux is that agent. It runs inside the cluster as a set of controllers. Each con
 
 Keep one sentence in mind: **a change reaches the cluster only through a commit, and anything else is drift that Flux undoes.** Every command in this module tests that sentence.
 
-The module has three parts. **GitOps Principles And Pull-Based Delivery** explains the four OpenGitOps principles, compares a pull-based agent with a push-based pipeline, and shows the Flux controllers already running in your playground. **Your First GitRepository And Kustomization** points Flux at the repository, deploys `podinfo` from it, and changes the application with a commit. A graded lab follows the second part. **Drift Correction And Pruning** changes the cluster by hand and deletes a file from Git, and shows what Flux does in each case.
+The module has four parts. **GitOps Principles And Pull-Based Delivery** explains the four OpenGitOps principles, compares a pull-based agent with a push-based pipeline, and shows the Flux controllers already running in your playground. **Your First GitRepository And Kustomization** points Flux at the repository, deploys `podinfo` from it, and changes the application with a commit. A graded lab follows the second part. **Drift Correction And Pruning** changes the cluster by hand and deletes a file from Git, and shows what Flux does in each case. **Reading A Failure** gives a fixed routine for finding the cause, and breaks a branch, a path, a credential and a suspend flag on purpose.
 
 ## Learning objectives
 
@@ -19,6 +19,7 @@ After this module you can:
 - Read `flux get sources git`, `flux get kustomizations` and `flux events`, and find the revision and the reason for a failure.
 - Change an application with a Git commit and force a reconciliation with `flux reconcile kustomization --with-source`.
 - Predict what Flux does after a manual change, after a file is deleted from Git, and while a Flux `Kustomization` is suspended.
+- Find the cause of a failing source or Flux `Kustomization` with a fixed routine.
 
 ## Before you start
 

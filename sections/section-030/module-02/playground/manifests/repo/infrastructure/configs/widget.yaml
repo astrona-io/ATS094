@@ -1,0 +1,7 @@
+apiVersion: example.astrona.io/v1
+kind: Widget
+metadata:
+  name: main
+  namespace: infra
+spec:
+  size: small

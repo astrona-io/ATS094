@@ -1,0 +1,53 @@
+# Separate Staging From Production
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-lab-010-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the repository gitops/fleet, the CoreDNS rewrite and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-lab-010-03-setup"
+      description: "Applies a GitRepository and three Flux Kustomizations where production uses the staging overlay and the staging namespace"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-kustomizations-ready"
+      description: "Confirms namespaces, staging and production are Ready and production uses its overlay"
+      type: "file"
+      source: "validation/validate-kustomizations-ready.sh"
+    - name: "validate-production-config"
+      description: "Confirms production runs 2 replicas with the message production"
+      type: "file"
+      source: "validation/validate-production-config.sh"
+    - name: "validate-staging-unchanged"
+      description: "Confirms staging still runs its own configuration"
+      type: "file"
+      source: "validation/validate-staging-unchanged.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

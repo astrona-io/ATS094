@@ -1,0 +1,53 @@
+# Wire Up The Cluster Entry Points
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-lab-030-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the repository gitops/fleet, the CoreDNS rewrite and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-lab-030-02-setup"
+      description: "Applies a GitRepository and three Flux Kustomizations with a wrong source, a missing dependency and a wrong path"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-kustomizations-ready"
+      description: "Confirms the three Flux Kustomizations are Ready and the controllers use the source fleet"
+      type: "file"
+      source: "validation/validate-kustomizations-ready.sh"
+    - name: "validate-order"
+      description: "Confirms configs depend on controllers and apps depend on configs"
+      type: "file"
+      source: "validation/validate-order.sh"
+    - name: "validate-widget-and-app"
+      description: "Confirms the Widget exists and podinfo runs 2 replicas from the overlay"
+      type: "file"
+      source: "validation/validate-widget-and-app.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

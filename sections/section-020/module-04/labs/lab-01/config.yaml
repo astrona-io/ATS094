@@ -1,0 +1,53 @@
+# Fix The Helm Release
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-094-lab-020-04"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, Gitea with the repository gitops/fleet, the CoreDNS rewrite and the Flux controllers"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-094-lab-020-04-setup"
+      description: "Applies a HelmRepository and a HelmRelease with a chart version that matches nothing and a values key the chart does not read"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits until Gitea and every Flux controller are available"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-release-ready"
+      description: "Confirms the HelmRelease podinfo is Ready and pins a 6.x chart version"
+      type: "file"
+      source: "validation/validate-release-ready.sh"
+    - name: "validate-values-key"
+      description: "Confirms the values use replicaCount and keep the message"
+      type: "file"
+      source: "validation/validate-values-key.sh"
+    - name: "validate-deployment-from-helm"
+      description: "Confirms the Deployment comes from a 6.x chart with 2 ready replicas and the message"
+      type: "file"
+      source: "validation/validate-deployment-from-helm.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - nicolaka/netshoot:v0.13

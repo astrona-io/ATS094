@@ -1,0 +1,61 @@
+# The starting Flux objects for ats-094-lab-020-05. All of them apply without an
+# error. The Alert is wrong in three ways:
+#   - providerRef names `team-hook`, but the Provider is `team-webhook`;
+#   - both event sources point at the namespace `default`; the Flux objects are
+#     in `flux-system`;
+#   - eventSeverity is `error`, so a healthy reconcile sends nothing.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: fleet
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: http://gitea.localtest.me:3000/gitops/fleet.git
+  ref:
+    branch: main
+  secretRef:
+    name: fleet-auth
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: podinfo
+  namespace: flux-system
+spec:
+  interval: 5m
+  path: ./apps/podinfo
+  prune: true
+  wait: true
+  timeout: 2m
+  sourceRef:
+    kind: GitRepository
+    name: fleet
+---
+# A lab placeholder address: nothing listens here, and the Provider is Ready
+# without a connection check.
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: team-webhook
+  namespace: flux-system
+spec:
+  type: generic
+  address: http://tester.gitea.svc.cluster.local:8080/flux-events
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: app-events
+  namespace: flux-system
+spec:
+  providerRef:
+    name: team-hook
+  eventSeverity: error
+  eventSources:
+    - kind: Kustomization
+      name: podinfo
+      namespace: default
+    - kind: GitRepository
+      name: fleet
+      namespace: default

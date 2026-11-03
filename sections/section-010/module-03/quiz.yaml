@@ -1,0 +1,245 @@
+# Knowledge check for module 03 of section 010. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-010-m03
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-010-module-03
+  title: "GitOps Terminology And Delivery Patterns"
+placement:
+  position: after
+  reading: sections/section-010/module-03/labs/lab-01/question.md
+questions:
+  - id: ats094-010-m03-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Define drift"
+    source_readings:
+      - sections/section-010/module-03/course-01-desired-state-actual-state-and-the-opengitops-principles.md
+    prompt: "Someone edits a Deployment with `kubectl edit`. Git is unchanged. What is the difference between the cluster and Git called?"
+    options:
+      - id: a
+        text: "Drift"
+        explanation: "Correct. Drift is a difference between the actual state and the desired state."
+      - id: b
+        text: "A revision"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "An artifact"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "An inventory"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Drift is a difference between the actual state and the desired state."
+
+  - id: ats094-010-m03-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the OpenGitOps principles"
+    source_readings:
+      - sections/section-010/module-03/course-01-desired-state-actual-state-and-the-opengitops-principles.md
+    prompt: "Which list contains the four OpenGitOps principles?"
+    options:
+      - id: a
+        text: "Declarative, encrypted, pushed manually, periodically audited"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Imperative, versioned, pulled automatically, continuously reconciled"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Declarative, branch-based, pushed by a pipeline, reconciled on demand"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Declarative, versioned and immutable, pulled automatically, continuously reconciled"
+        explanation: "Correct. The principles are declarative, versioned and immutable, pulled automatically and continuously reconciled."
+    correct_option: d
+    explanation: "Correct. The principles are declarative, versioned and immutable, pulled automatically and continuously reconciled."
+
+  - id: ats094-010-m03-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare pull and push delivery"
+    source_readings:
+      - sections/section-010/module-03/course-01-desired-state-actual-state-and-the-opengitops-principles.md
+    prompt: "What is the main difference between pull-based and push-based delivery?"
+    options:
+      - id: a
+        text: "Pull-based delivery runs only when a pipeline runs."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Push-based delivery corrects drift continuously."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In pull-based delivery an agent inside the cluster fetches the desired state, so cluster credentials stay in the cluster."
+        explanation: "Correct. Flux runs in the cluster and fetches from Git. A push pipeline needs cluster credentials and runs only when triggered."
+      - id: d
+        text: "Pull-based delivery needs one branch per environment."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Flux runs in the cluster and fetches from Git. A push pipeline needs cluster credentials and runs only when triggered."
+
+  - id: ats094-010-m03-q04
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name a revision"
+    source_readings:
+      - sections/section-010/module-03/course-02-the-flux-vocabulary.md
+    prompt: "Which value is a revision of a `GitRepository`?"
+    options:
+      - id: a
+        text: "`flux-system/fleet`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`main@sha1:<commit hash>`"
+        explanation: "Correct. A revision names one version of an artifact, for a GitRepository the branch and commit hash."
+      - id: c
+        text: "`./apps/podinfo/base`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`Ready=True`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. A revision names one version of an artifact, for a GitRepository the branch and commit hash."
+
+  - id: ats094-010-m03-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Explain the inventory"
+    source_readings:
+      - sections/section-010/module-03/course-02-the-flux-vocabulary.md
+    prompt: "Why does a Flux `Kustomization` keep an inventory?"
+    options:
+      - id: a
+        text: "To know which objects it applied, so that it can prune the ones that left Git."
+        explanation: "Correct. Pruning removes only objects that are in the inventory and no longer in Git."
+      - id: b
+        text: "To cache the Git repository."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "To store the credentials of the source."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "To order the reconcile of other Flux objects."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Pruning removes only objects that are in the inventory and no longer in Git."
+
+  - id: ats094-010-m03-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Read lastAttemptedRevision"
+    source_readings:
+      - sections/section-010/module-03/course-02-the-flux-vocabulary.md
+    prompt: "`status.lastAttemptedRevision` differs from `status.lastAppliedRevision` on a Flux `Kustomization`. What does that mean?"
+    options:
+      - id: a
+        text: "The GitRepository is suspended."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Pruning is switched off."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The interval is too short."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The last attempt to apply the newer revision failed."
+        explanation: "Correct. The applied revision stays at the last success while the attempted revision shows the newest try."
+    correct_option: d
+    explanation: "Correct. The applied revision stays at the last success while the attempted revision shows the newest try."
+
+  - id: ats094-010-m03-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Choose the layout for environments"
+    source_readings:
+      - sections/section-010/module-03/course-03-environments-in-a-repository.md
+    prompt: "Which repository layout does this module use for environments?"
+    options:
+      - id: a
+        text: "One branch per environment"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "One repository per Deployment"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "One folder per environment on one branch, built on a shared base"
+        explanation: "Correct. Folders make the differences between environments visible in one view and avoid merging between branches."
+      - id: d
+        text: "One Flux Kustomization for all environments"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Folders make the differences between environments visible in one view and avoid merging between branches."
+
+  - id: ats094-010-m03-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Use targetNamespace"
+    source_readings:
+      - sections/section-010/module-03/course-03-environments-in-a-repository.md
+    prompt: "The base of an application has no namespace. Which field of the Flux `Kustomization` places its objects in the namespace `production`?"
+    options:
+      - id: a
+        text: "`spec.namespaceSelector`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.targetNamespace`"
+        explanation: "Correct. targetNamespace sets the namespace of every namespaced object that the Flux Kustomization applies."
+      - id: c
+        text: "`spec.sourceRef.namespace`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.healthChecks`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. targetNamespace sets the namespace of every namespaced object that the Flux Kustomization applies."
+
+  - id: ats094-010-m03-q09
+    type: single_choice
+    difficulty: advanced
+    learning_objective: "Diagnose a Ready but wrong environment"
+    source_readings:
+      - sections/section-010/module-03/course-03-environments-in-a-repository.md
+    prompt: "The Flux `Kustomization` `production` is Ready, but the cluster has no Deployment in the namespace `production`. What do you check first?"
+    options:
+      - id: a
+        text: "`spec.path` and `spec.targetNamespace` of the object"
+        explanation: "Correct. Ready only proves that something was applied. A wrong path or namespace applies the wrong thing without an error."
+      - id: b
+        text: "Whether `prune` is true"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Whether the controllers use the latest image"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Whether the repository is private"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Ready only proves that something was applied. A wrong path or namespace applies the wrong thing without an error."
+
+  - id: ats094-010-m03-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Roll back by reverting"
+    source_readings:
+      - sections/section-010/module-03/course-04-promotion-and-rollback.md
+    prompt: "A commit made production unhealthy. Which action matches GitOps practice?"
+    options:
+      - id: a
+        text: "Edit the Deployment with `kubectl edit`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Delete the pods until they start."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Suspend the Flux Kustomization and leave it that way."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Revert the commit in Git, push, and let Flux apply the result."
+        explanation: "Correct. Rollback is a change to Git. A new revert commit keeps the history and Flux follows it."
+    correct_option: d
+    explanation: "Correct. Rollback is a change to Git. A new revert commit keeps the history and Flux follows it."

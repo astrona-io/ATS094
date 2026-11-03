@@ -1,0 +1,245 @@
+# Knowledge check for module 04 of section 020. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-020-m04
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-04
+  title: "Helm Controller And Releases"
+placement:
+  position: after
+  reading: sections/section-020/module-04/labs/lab-01/question.md
+questions:
+  - id: ats094-020-m04-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the three Helm objects"
+    source_readings:
+      - sections/section-020/module-04/course-01-helmrepository-helmchart-and-helmrelease.md
+    prompt: "Which object does Flux create between a `HelmRelease` and a `HelmRepository`?"
+    options:
+      - id: a
+        text: "A `HelmChart`, which source-controller packages as an artifact."
+        explanation: "Correct. The HelmRelease names the chart, Flux creates the HelmChart, and helm-controller reads its artifact."
+      - id: b
+        text: "A `HelmValues` object that stores the values."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "A `Kustomization` that renders the chart."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "A `Bucket` that stores the chart."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The HelmRelease names the chart, Flux creates the HelmChart, and helm-controller reads its artifact."
+
+  - id: ats094-020-m04-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find where a release is stored"
+    source_readings:
+      - sections/section-020/module-04/course-01-helmrepository-helmchart-and-helmrelease.md
+    prompt: "Where does Helm record the history of a release that helm-controller installed?"
+    options:
+      - id: a
+        text: "In the status of the `HelmRepository`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In a ConfigMap in `flux-system`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the Git repository of the cluster."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In Secrets of the type `helm.sh/release.v1` in the storage namespace."
+        explanation: "Correct. Each release version is a Secret such as sh.helm.release.v1.podinfo.v1. Do not edit them by hand."
+    correct_option: d
+    explanation: "Correct. Each release version is a Secret such as sh.helm.release.v1.podinfo.v1. Do not edit them by hand."
+
+  - id: ats094-020-m04-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a release name"
+    source_readings:
+      - sections/section-020/module-04/course-01-helmrepository-helmchart-and-helmrelease.md
+    prompt: "A `HelmRelease` named `podinfo` sets `targetNamespace: podinfo` and no `releaseName`. What is the release name?"
+    options:
+      - id: a
+        text: "`podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`flux-system-podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`podinfo-podinfo`"
+        explanation: "Correct. With a target namespace, the default release name is prefixed. Set releaseName to avoid surprises."
+      - id: d
+        text: "`helm-podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. With a target namespace, the default release name is prefixed. Set releaseName to avoid surprises."
+
+  - id: ats094-020-m04-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know which value wins"
+    source_readings:
+      - sections/section-020/module-04/course-02-values-and-merge-order.md
+    prompt: "A key is set in the chart defaults, in a `valuesFrom` entry and in `spec.values`. Which value is used?"
+    options:
+      - id: a
+        text: "The one in the chart defaults."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The one in `spec.values`."
+        explanation: "Correct. Order: chart defaults, valuesFrom in list order, then spec.values, which overrides all."
+      - id: c
+        text: "The one in `valuesFrom`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The controller reports a conflict and stops."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Order: chart defaults, valuesFrom in list order, then spec.values, which overrides all."
+
+  - id: ats094-020-m04-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Spot an unknown value key"
+    source_readings:
+      - sections/section-020/module-04/course-02-values-and-merge-order.md
+    prompt: "The values contain `replicas: 2`, but the chart reads `replicaCount`. What is the result?"
+    options:
+      - id: a
+        text: "The install succeeds and the key has no effect."
+        explanation: "Correct. Helm does not reject unknown keys unless the chart has a schema that does."
+      - id: b
+        text: "The install fails with an unknown key error."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The chart uses `replicas` as an alias."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Flux renames the key automatically."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Helm does not reject unknown keys unless the chart has a schema that does."
+
+  - id: ats094-020-m04-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write one value from a Secret"
+    source_readings:
+      - sections/section-020/module-04/course-02-values-and-merge-order.md
+    prompt: "Which `valuesFrom` field writes the value of a Secret key to a single path such as `ui.message`?"
+    options:
+      - id: a
+        text: "`valuesKey`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`optional`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`sourceRef`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`targetPath`"
+        explanation: "Correct. valuesKey picks the key to read, and targetPath says where in the values to put it."
+    correct_option: d
+    explanation: "Correct. valuesKey picks the key to read, and targetPath says where in the values to put it."
+
+  - id: ats094-020-m04-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what starts an upgrade"
+    source_readings:
+      - sections/section-020/module-04/course-03-install-upgrade-rollback-and-remediation.md
+    prompt: "Which change starts an upgrade of a release?"
+    options:
+      - id: a
+        text: "The interval passing with no other change."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "A change to the replicas made with `kubectl`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "A new chart version or changed values."
+        explanation: "Correct. Without a change in version, values or generation, the interval does nothing."
+      - id: d
+        text: "A new commit anywhere in the Git repository."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. Without a change in version, values or generation, the interval does nothing."
+
+  - id: ats094-020-m04-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose remediation"
+    source_readings:
+      - sections/section-020/module-04/course-03-install-upgrade-rollback-and-remediation.md
+    prompt: "A first install fails. What does remediation of the install do?"
+    options:
+      - id: a
+        text: "It rolls back to the previous release."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It uninstalls the failed attempt before a retry, because there is no earlier release to go back to."
+        explanation: "Correct. A rollback needs an earlier release, which a first install does not have."
+      - id: c
+        text: "It deletes the HelmRelease."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It switches to another chart version."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. A rollback needs an earlier release, which a first install does not have."
+
+  - id: ats094-020-m04-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Turn on drift detection"
+    source_readings:
+      - sections/section-020/module-04/course-04-drift-detection-ordering-and-post-renderers.md
+    prompt: "Which setting makes helm-controller correct hand edits to the objects of a release?"
+    options:
+      - id: a
+        text: "`spec.driftDetection.mode: enabled`"
+        explanation: "Correct. With mode enabled the controller compares live objects with the release on every reconcile. Mode warn only reports."
+      - id: b
+        text: "`spec.test.enable: true`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.upgrade.force: true`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.suspend: false`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. With mode enabled the controller compares live objects with the release on every reconcile. Mode warn only reports."
+
+  - id: ats094-020-m04-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Change a chart without forking it"
+    source_readings:
+      - sections/section-020/module-04/course-04-drift-detection-ordering-and-post-renderers.md
+    prompt: "Which field changes the rendered manifests of a chart before they are applied?"
+    options:
+      - id: a
+        text: "`spec.valuesFrom`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.dependsOn`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.maxHistory`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.postRenderers` with a `kustomize` entry"
+        explanation: "Correct. Post-renderers apply patches and image changes after rendering and before applying."
+    correct_option: d
+    explanation: "Correct. Post-renderers apply patches and image changes after rendering and before applying."

@@ -1,0 +1,245 @@
+# Knowledge check for module 06 of section 020. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-020-m06
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-06
+  title: "Image Automation In Depth"
+placement:
+  position: after
+  reading: sections/section-020/module-06/labs/lab-01/question.md
+questions:
+  - id: ats094-020-m06-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Install the image controllers"
+    source_readings:
+      - sections/section-020/module-06/course-01-scanning-a-registry-with-imagerepository.md
+    prompt: "Which flag adds the image automation controllers to `flux install`?"
+    options:
+      - id: a
+        text: "`--components-extra=image-reflector-controller,image-automation-controller`"
+        explanation: "Correct. The image controllers are optional components. They are added with components-extra."
+      - id: b
+        text: "`--image-automation=true`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`--components=image`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`--enable-image-update`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The image controllers are optional components. They are added with components-extra."
+
+  - id: ats094-020-m06-q02
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Scan a registry"
+    source_readings:
+      - sections/section-020/module-06/course-01-scanning-a-registry-with-imagerepository.md
+    prompt: "How is the image written in the `spec.image` of an `ImageRepository`?"
+    options:
+      - id: a
+        text: "With the tag `latest`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "With a digest only."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "As a Git URL."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Without a tag, for example `ghcr.io/stefanprodan/podinfo`."
+        explanation: "Correct. The ImageRepository scans all tags of one image, so no tag is given."
+    correct_option: d
+    explanation: "Correct. The ImageRepository scans all tags of one image, so no tag is given."
+
+  - id: ats094-020-m06-q03
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Give the scan credentials"
+    source_readings:
+      - sections/section-020/module-06/course-01-scanning-a-registry-with-imagerepository.md
+    prompt: "Which field names the Secret with registry credentials on an `ImageRepository`?"
+    options:
+      - id: a
+        text: "`spec.credentials`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.pullSecret`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.secretRef`"
+        explanation: "Correct. The Secret of type dockerconfigjson is in the same namespace as the ImageRepository."
+      - id: d
+        text: "`spec.authRef`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The Secret of type dockerconfigjson is in the same namespace as the ImageRepository."
+
+  - id: ats094-020-m06-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Write a semver range"
+    source_readings:
+      - sections/section-020/module-06/course-02-selecting-a-tag-with-imagepolicy.md
+    prompt: "Which `semver` range selects the newest tag that starts with 6?"
+    options:
+      - id: a
+        text: "`>=9.0.0`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`6.x`"
+        explanation: "Correct. A range selects the highest matching version. The range 6.x matches every 6.minor.patch tag."
+      - id: c
+        text: "`latest`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`^7.0.0`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. A range selects the highest matching version. The range 6.x matches every 6.minor.patch tag."
+
+  - id: ats094-020-m06-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose between alphabetical and numerical"
+    source_readings:
+      - sections/section-020/module-06/course-02-selecting-a-tag-with-imagepolicy.md
+    prompt: "Tags are build numbers such as 9 and 10. Which policy selects 10?"
+    options:
+      - id: a
+        text: "`numerical` with `order: asc`"
+        explanation: "Correct. Alphabetical order sorts 9 after 10. Numerical compares the values as numbers."
+      - id: b
+        text: "`alphabetical` with `order: asc`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`semver` with `range: 10`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`alphabetical` with `order: desc`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. Alphabetical order sorts 9 after 10. Numerical compares the values as numbers."
+
+  - id: ats094-020-m06-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the selected tag"
+    source_readings:
+      - sections/section-020/module-06/course-02-selecting-a-tag-with-imagepolicy.md
+    prompt: "Where does an `ImagePolicy` store the tag it selected?"
+    options:
+      - id: a
+        text: "In `spec.policy`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In the Deployment of the application."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the Git repository."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In `status.latestRef`."
+        explanation: "Correct. The policy only changes its status. It does not write to the cluster or Git."
+    correct_option: d
+    explanation: "Correct. The policy only changes its status. It does not write to the cluster or Git."
+
+  - id: ats094-020-m06-q07
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Mark an image for update"
+    source_readings:
+      - sections/section-020/module-06/course-03-writing-the-tag-to-git.md
+    prompt: "What does a marker look like?"
+    options:
+      - id: a
+        text: "An annotation on the Deployment named `image.update`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "A label on the ImagePolicy."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "A comment such as `# {\"$imagepolicy\": \"flux-system:podinfo\"}` on the line with the image."
+        explanation: "Correct. The automation edits the line that carries the marker for the named policy."
+      - id: d
+        text: "A line in `kustomization.yaml`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The automation edits the line that carries the marker for the named policy."
+
+  - id: ats094-020-m06-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find why the automation changes nothing"
+    source_readings:
+      - sections/section-020/module-06/course-03-writing-the-tag-to-git.md
+    prompt: "The policy selects a new tag, but `ImageUpdateAutomation` pushes no commit. What do you check first?"
+    options:
+      - id: a
+        text: "Whether the cluster has enough memory."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Whether `update.path` contains the file with the marker."
+        explanation: "Correct. The automation only searches files under update.path. No match is not an error."
+      - id: c
+        text: "Whether the Flux CLI is the newest version."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "Whether the Deployment has 2 replicas."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The automation only searches files under update.path. No match is not an error."
+
+  - id: ats094-020-m06-q09
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Know what the automation changes"
+    source_readings:
+      - sections/section-020/module-06/course-03-writing-the-tag-to-git.md
+    prompt: "Which system does `ImageUpdateAutomation` write to?"
+    options:
+      - id: a
+        text: "The Git repository."
+        explanation: "Correct. The automation writes to Git. A Flux Kustomization applies the commit."
+      - id: b
+        text: "The Kubernetes API server directly."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "The container registry."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The ImagePolicy."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The automation writes to Git. A Flux Kustomization applies the commit."
+
+  - id: ats094-020-m06-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Add a review step"
+    source_readings:
+      - sections/section-020/module-06/course-04-review-environments-and-debugging.md
+    prompt: "Which setting makes the automation push to a branch other than the one it checked out?"
+    options:
+      - id: a
+        text: "`spec.update.branch`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.suspend`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`spec.sourceRef.branch`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.git.push.branch`"
+        explanation: "Correct. A separate push branch can be reviewed with a pull request before it reaches main."
+    correct_option: d
+    explanation: "Correct. A separate push branch can be reviewed with a pull request before it reaches main."

@@ -18,7 +18,7 @@ This section takes Flux apart. You see which controller owns which API, how a so
 
 ## The learning path
 
-The section has three modules. The first has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
+The section has six modules. The first has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where you can explore freely, and the landing page starts it for you.
 
 ### 1. Find Your Way Around The GitOps Toolkit
 
@@ -27,7 +27,8 @@ The module starts at its landing page, which also launches the playground. The p
 1. The Controllers And The APIs They Own
 2. The Flux CLI Against The Controllers
 3. Choosing Components, followed by the lab **Add The Image Automation Controllers**
-4. Summary
+4. Controller Permissions And Tenancy
+5. Summary
 
 ### 2. Source Controller And Artifacts
 
@@ -43,6 +44,30 @@ The module starts at its landing page, which also launches the playground. The p
 2. Patches, Images And Target Namespace
 3. Variable Substitution, followed by the lab **Fix The Variable Substitution**
 4. Service Accounts And Tenant Isolation
+5. Summary
+
+### Helm Controller And Releases
+
+1. HelmRepository, HelmChart And HelmRelease
+2. Values And Merge Order
+3. Install, Upgrade, Rollback And Remediation, followed by the lab **Fix The Helm Release**
+4. Drift Detection, Ordering And Post-Renderers
+5. Summary
+
+### Notifications And Webhooks
+
+1. Flux Events And notification-controller
+2. Providers And Alerts, followed by the lab **Route The Flux Events**
+3. Commit Status Notifications
+4. Receivers And Webhooks
+5. Summary
+
+### Image Automation In Depth
+
+1. Scanning A Registry With ImageRepository
+2. Selecting A Tag With ImagePolicy
+3. Writing The Tag To Git, followed by the lab **Make The Image Policy Select And Update**
+4. Review, Environments And Debugging
 5. Summary
 
 ## Section capstone: Find The Controller That Stopped Working

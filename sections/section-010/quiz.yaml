@@ -243,3 +243,49 @@ questions:
         explanation: "Not correct. `wait` does not affect pruning."
     correct_option: b
     explanation: "Correct. Flux still applies the object but never prunes it."
+
+  - id: ats094-010-q11
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find the cause of a failing source"
+    source_readings:
+      - sections/section-010/module-01/course-04-reading-a-failure.md
+    prompt: "The `GitRepository` is not ready because its branch does not exist. What is the state of the Flux `Kustomization` that uses it?"
+    options:
+      - id: a
+        text: "It becomes not ready at once."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It is deleted by source-controller."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It stays ready, because it keeps the last artifact that it applied."
+        explanation: "Correct. A broken source leaves the Flux Kustomization on its last artifact, so read both objects."
+      - id: d
+        text: "It applies an empty artifact and prunes everything."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. A broken source leaves the Flux Kustomization on its last artifact, so read both objects."
+
+  - id: ats094-010-q12
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Compare revisions"
+    source_readings:
+      - sections/section-010/module-01/course-04-reading-a-failure.md
+    prompt: "`status.lastAttemptedRevision` differs from `status.lastAppliedRevision`. What does that tell you?"
+    options:
+      - id: a
+        text: "The source has no new commit."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The newest attempt to apply failed."
+        explanation: "Correct. The applied revision stays at the last success while the attempted revision shows the newest try."
+      - id: c
+        text: "Pruning is off."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The interval is shorter than the timeout."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The applied revision stays at the last success while the attempted revision shows the newest try."

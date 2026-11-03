@@ -100,8 +100,11 @@ modules:
         title: "Drift Correction And Pruning"
         path: sections/section-010/module-01/course-03-drift-correction-and-pruning.md
       - type: reading
+        title: "Reading A Failure"
+        path: sections/section-010/module-01/course-04-reading-a-failure.md
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
 
       - type: reading
         title: "The Reconciliation Loop In Depth"
@@ -142,6 +145,49 @@ modules:
       - type: quiz
         title: "Knowledge Check: The Reconciliation Loop In Depth"
         path: sections/section-010/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "GitOps Terminology And Delivery Patterns"
+        path: sections/section-010/module-03/course.md
+      - type: reading
+        title: "Desired State, Actual State And The OpenGitOps Principles"
+        path: sections/section-010/module-03/course-01-desired-state-actual-state-and-the-opengitops-principles.md
+      - type: reading
+        title: "The Flux Vocabulary"
+        path: sections/section-010/module-03/course-02-the-flux-vocabulary.md
+      - type: reading
+        title: "Environments In A Repository"
+        path: sections/section-010/module-03/course-03-environments-in-a-repository.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Separate Staging From Production Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: environments
+        task_kind: troubleshooting
+        tags: [environments, overlays, targetnamespace, kustomization, dependson]
+        learning_goals:
+          - Compare what two Flux Kustomizations apply and where
+          - Fix a path and a target namespace
+          - Prove both environments run their own configuration
+        resources:
+          - name: "Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+          - name: "Flux repository structure"
+            url: https://fluxcd.io/flux/guides/repository-structure/
+      - type: reading
+        title: "Promotion And Rollback"
+        path: sections/section-010/module-03/course-04-promotion-and-rollback.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: GitOps Terminology And Delivery Patterns"
+        path: sections/section-010/module-03/quiz.yaml
         pass_score: 70
 
       - type: reading
@@ -218,8 +264,11 @@ modules:
           - name: "flux install"
             url: https://fluxcd.io/flux/cmd/flux_install/
       - type: reading
+        title: "Controller Permissions And Tenancy"
+        path: sections/section-020/module-01/course-04-controller-permissions-and-tenancy.md
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-04-summary.md
+        path: sections/section-020/module-01/course-05-summary.md
 
       - type: reading
         title: "Source Controller And Artifacts"
@@ -304,6 +353,133 @@ modules:
         pass_score: 70
 
       - type: reading
+        title: "Helm Controller And Releases"
+        path: sections/section-020/module-04/course.md
+      - type: reading
+        title: "HelmRepository, HelmChart And HelmRelease"
+        path: sections/section-020/module-04/course-01-helmrepository-helmchart-and-helmrelease.md
+      - type: reading
+        title: "Values And Merge Order"
+        path: sections/section-020/module-04/course-02-values-and-merge-order.md
+      - type: reading
+        title: "Install, Upgrade, Rollback And Remediation"
+        path: sections/section-020/module-04/course-03-install-upgrade-rollback-and-remediation.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-04/labs/lab-01/question.md
+      - type: lab
+        title: "Fix The Helm Release Lab"
+        path: sections/section-020/module-04/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: helm-controller
+        task_kind: troubleshooting
+        tags: [helmrelease, helmchart, values, chart-version, helmrepository]
+        learning_goals:
+          - Read the HelmChart and HelmRelease messages to find why a release is not ready
+          - Fix a chart version range and a values key the chart does not read
+          - Prove the running Deployment matches the values
+        resources:
+          - name: "HelmRelease API"
+            url: https://fluxcd.io/flux/components/helm/helmreleases/
+      - type: reading
+        title: "Drift Detection, Ordering And Post-Renderers"
+        path: sections/section-020/module-04/course-04-drift-detection-ordering-and-post-renderers.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-04/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Helm Controller And Releases"
+        path: sections/section-020/module-04/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Notifications And Webhooks"
+        path: sections/section-020/module-05/course.md
+      - type: reading
+        title: "Flux Events And notification-controller"
+        path: sections/section-020/module-05/course-01-flux-events-and-notification-controller.md
+      - type: reading
+        title: "Providers And Alerts"
+        path: sections/section-020/module-05/course-02-providers-and-alerts.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-05/labs/lab-01/question.md
+      - type: lab
+        title: "Route The Flux Events Lab"
+        path: sections/section-020/module-05/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: notification-controller
+        task_kind: troubleshooting
+        tags: [alert, provider, eventsources, eventseverity, notification-controller]
+        learning_goals:
+          - Read the Alert status to find why it does not work
+          - Fix a providerRef, the event source namespaces and the severity
+          - Prove the Alert is ready and selects the right objects
+        resources:
+          - name: "Alert API"
+            url: https://fluxcd.io/flux/components/notification/alerts/
+          - name: "Provider API"
+            url: https://fluxcd.io/flux/components/notification/providers/
+      - type: reading
+        title: "Commit Status Notifications"
+        path: sections/section-020/module-05/course-03-commit-status-notifications.md
+      - type: reading
+        title: "Receivers And Webhooks"
+        path: sections/section-020/module-05/course-04-receivers-and-webhooks.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-05/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Notifications And Webhooks"
+        path: sections/section-020/module-05/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Image Automation In Depth"
+        path: sections/section-020/module-06/course.md
+      - type: reading
+        title: "Scanning A Registry With ImageRepository"
+        path: sections/section-020/module-06/course-01-scanning-a-registry-with-imagerepository.md
+      - type: reading
+        title: "Selecting A Tag With ImagePolicy"
+        path: sections/section-020/module-06/course-02-selecting-a-tag-with-imagepolicy.md
+      - type: reading
+        title: "Writing The Tag To Git"
+        path: sections/section-020/module-06/course-03-writing-the-tag-to-git.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-06/labs/lab-01/question.md
+      - type: lab
+        title: "Make The Image Policy Select And Update Lab"
+        path: sections/section-020/module-06/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: image-automation
+        task_kind: troubleshooting
+        tags: [imagerepository, imagepolicy, imageupdateautomation, semver, markers]
+        learning_goals:
+          - Follow the chain from the registry scan to the commit in Git
+          - Fix a policy range that matches nothing and an update path without markers
+          - Prove the new tag was written to Git and applied by Flux
+        resources:
+          - name: "Image automation guide"
+            url: https://fluxcd.io/flux/guides/image-update/
+          - name: "ImagePolicy API"
+            url: https://fluxcd.io/flux/components/image/imagepolicies/
+      - type: reading
+        title: "Review, Environments And Debugging"
+        path: sections/section-020/module-06/course-04-review-environments-and-debugging.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-06/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Image Automation In Depth"
+        path: sections/section-020/module-06/quiz.yaml
+        pass_score: 70
+
+      - type: reading
         title: Question
         path: sections/section-020/capstone/labs/lab-01/question.md
       - type: lab
@@ -379,8 +555,97 @@ modules:
         title: "Deploy Keys, Tokens And The flux-system Secret"
         path: sections/section-030/module-01/course-03-deploy-keys-and-credentials.md
       - type: reading
+        title: "Troubleshooting A Bootstrap"
+        path: sections/section-030/module-01/course-04-troubleshooting-a-bootstrap.md
+      - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-04-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Repository Structure And Cluster Layout"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "Monorepo Or Many Repositories"
+        path: sections/section-030/module-02/course-01-monorepo-or-many-repositories.md
+      - type: reading
+        title: "Apps, Infrastructure And Clusters"
+        path: sections/section-030/module-02/course-02-apps-infrastructure-and-clusters.md
+      - type: reading
+        title: "Ordering With dependsOn And wait"
+        path: sections/section-030/module-02/course-03-ordering-with-dependson-and-wait.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Wire Up The Cluster Entry Points Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: repository-structure
+        task_kind: troubleshooting
+        tags: [repository-structure, dependson, wait, sourceref, path]
+        learning_goals:
+          - Read the Ready messages of a chain of Flux Kustomizations
+          - Fix a source name, a dependency and a path
+          - Prove the infrastructure and the application run from the right folders
+        resources:
+          - name: "Flux repository structure"
+            url: https://fluxcd.io/flux/guides/repository-structure/
+          - name: "Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: "Several Clusters From One Repository"
+        path: sections/section-030/module-02/course-04-several-clusters-from-one-repository.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-02/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Repository Structure And Cluster Layout"
+        path: sections/section-030/module-02/quiz.yaml
+        pass_score: 70
+
+      - type: reading
+        title: "Upgrading, Customizing And Uninstalling Flux"
+        path: sections/section-030/module-03/course.md
+      - type: reading
+        title: "Upgrading Flux"
+        path: sections/section-030/module-03/course-01-upgrading-flux.md
+      - type: reading
+        title: "Customizing The Installation"
+        path: sections/section-030/module-03/course-02-customizing-the-installation.md
+      - type: reading
+        title: "Uninstalling Flux"
+        path: sections/section-030/module-03/course-03-uninstalling-flux.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Uninstall Flux And Keep The Workload Lab"
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: uninstall
+        task_kind: migration
+        tags: [uninstall, finalizers, prune, keep-namespace]
+        learning_goals:
+          - Explain what each way of removing Flux deletes
+          - Remove Flux with flux uninstall and keep the namespace
+          - Prove the workload is the same Deployment
+        resources:
+          - name: "Uninstall Flux"
+            url: https://fluxcd.io/flux/installation/uninstall/
+          - name: "flux uninstall"
+            url: https://fluxcd.io/flux/cmd/flux_uninstall/
+      - type: reading
+        title: "Rebuilding A Cluster From Git"
+        path: sections/section-030/module-03/course-04-rebuilding-a-cluster-from-git.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-03/course-05-summary.md
+      - type: quiz
+        title: "Knowledge Check: Upgrading, Customizing And Uninstalling Flux"
+        path: sections/section-030/module-03/quiz.yaml
+        pass_score: 70
 
       - type: reading
         title: Question

@@ -1,0 +1,245 @@
+# Knowledge check for module 05 of section 020. Listed in astrona.yaml as a `type: quiz` entry after the module summary.
+schema_version: 1
+kind: question_bank
+id: ats094-020-m05
+course_id: ATS094
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam questions.
+scope:
+  type: module
+  id: section-020-module-05
+  title: "Notifications And Webhooks"
+placement:
+  position: after
+  reading: sections/section-020/module-05/labs/lab-01/question.md
+questions:
+  - id: ats094-020-m05-q01
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Read Flux events"
+    source_readings:
+      - sections/section-020/module-05/course-01-flux-events-and-notification-controller.md
+    prompt: "Which command lists the events of the Flux `Kustomization` `podinfo`?"
+    options:
+      - id: a
+        text: "`flux events --for Kustomization/podinfo`"
+        explanation: "Correct. flux events reads the Kubernetes events of an object."
+      - id: b
+        text: "`flux get events podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "`flux logs --kind=Kustomization`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`flux trace podinfo`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. flux events reads the Kubernetes events of an object."
+
+  - id: ats094-020-m05-q02
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Trace the path of an event"
+    source_readings:
+      - sections/section-020/module-05/course-01-flux-events-and-notification-controller.md
+    prompt: "An event matches no `Alert`. What does notification-controller do with it?"
+    options:
+      - id: a
+        text: "It sends it to the first Provider it finds."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It retries until an Alert matches."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It stores it in a ConfigMap."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It drops it without a message."
+        explanation: "Correct. Events are forwarded only when an Alert selects them. Nothing fails when none does."
+    correct_option: d
+    explanation: "Correct. Events are forwarded only when an Alert selects them. Nothing fails when none does."
+
+  - id: ats094-020-m05-q03
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Name the Provider and the Alert"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "What is the job of the `Alert` object?"
+    options:
+      - id: a
+        text: "It stores the credentials for the destination."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "It creates a URL that outside systems call."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It selects events by source and severity and sends them to a Provider."
+        explanation: "Correct. The Provider is the destination. The Alert is the filter that connects events to it."
+      - id: d
+        text: "It restarts a controller after an error."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. The Provider is the destination. The Alert is the filter that connects events to it."
+
+  - id: ats094-020-m05-q04
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Diagnose an Alert that cannot find its Provider"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "The `Ready` message of an `Alert` says the provider was not found. Which field is likely wrong?"
+    options:
+      - id: a
+        text: "`spec.eventSeverity`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "`spec.providerRef.name`"
+        explanation: "Correct. The providerRef must name a Provider in the same namespace."
+      - id: c
+        text: "`spec.summary`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "`spec.exclusionList`"
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. The providerRef must name a Provider in the same namespace."
+
+  - id: ats094-020-m05-q05
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Choose a severity"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "An `Alert` has `eventSeverity: error`. Which events does it send?"
+    options:
+      - id: a
+        text: "Only failures."
+        explanation: "Correct. info sends everything, error sends only failures."
+      - id: b
+        text: "Every event, including successful applies."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Only events from the first source."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "No events, because error is not a valid value."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. info sends everything, error sends only failures."
+
+  - id: ats094-020-m05-q06
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Keep an address secret"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "Where should the webhook URL of a chat service be kept?"
+    options:
+      - id: a
+        text: "In `spec.summary` of the Alert."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In a ConfigMap in the namespace `default`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the label of the Provider."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In a Secret named in `spec.secretRef` of the Provider, under the key `address`."
+        explanation: "Correct. The Provider is stored in Git, so the secret address belongs in a Secret."
+    correct_option: d
+    explanation: "Correct. The Provider is stored in Git, so the secret address belongs in a Secret."
+
+  - id: ats094-020-m05-q07
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find a silent Alert"
+    source_readings:
+      - sections/section-020/module-05/course-02-providers-and-alerts.md
+    prompt: "An `Alert` is ready but no message arrives. What do you check first?"
+    options:
+      - id: a
+        text: "Whether the Provider type is `generic`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "Whether the cluster has more than one node."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "Whether the names, namespaces and severity of `eventSources` match the real events."
+        explanation: "Correct. A filter that selects nothing is silent, not failed."
+      - id: d
+        text: "Whether the Flux CLI is the latest version."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: c
+    explanation: "Correct. A filter that selects nothing is silent, not failed."
+
+  - id: ats094-020-m05-q08
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Send a commit status"
+    source_readings:
+      - sections/section-020/module-05/course-03-commit-status-notifications.md
+    prompt: "What does the `address` of a `gitea` or `github` Provider hold?"
+    options:
+      - id: a
+        text: "The URL of a Slack webhook."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "The URL of the repository."
+        explanation: "Correct. Git providers write a status to a commit, so they need the repository URL and a token."
+      - id: c
+        text: "The URL of the Flux receiver."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "The URL of the container registry."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: b
+    explanation: "Correct. Git providers write a status to a commit, so they need the repository URL and a token."
+
+  - id: ats094-020-m05-q09
+    type: single_choice
+    difficulty: beginner
+    learning_objective: "Create an inbound webhook"
+    source_readings:
+      - sections/section-020/module-05/course-04-receivers-and-webhooks.md
+    prompt: "What does a call to the webhook path of a `Receiver` do?"
+    options:
+      - id: a
+        text: "It requests a reconcile of the resources listed in the Receiver."
+        explanation: "Correct. The call only starts a reconcile. The sources still decide what is applied."
+      - id: b
+        text: "It changes the revision that Flux applies."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "It creates a new Alert."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "It deploys the workload without a source."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+    correct_option: a
+    explanation: "Correct. The call only starts a reconcile. The sources still decide what is applied."
+
+  - id: ats094-020-m05-q10
+    type: single_choice
+    difficulty: intermediate
+    learning_objective: "Find and secure the webhook path"
+    source_readings:
+      - sections/section-020/module-05/course-04-receivers-and-webhooks.md
+    prompt: "Where do you read the path to give to the sender of a webhook?"
+    options:
+      - id: a
+        text: "In `spec.resources` of the Receiver."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: b
+        text: "In the log of the Git server."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: c
+        text: "In the Secret `webhook-token` under the key `path`."
+        explanation: "Not correct. This does not match how Flux behaves; read the explanation of the correct option."
+      - id: d
+        text: "In `status.webhookPath` of the Receiver."
+        explanation: "Correct. The path starts with /hook/ and contains a digest, so it cannot be guessed. Expose it only with TLS."
+    correct_option: d
+    explanation: "Correct. The path starts with /hook/ and contains a digest, so it cannot be guessed. Expose it only with TLS."

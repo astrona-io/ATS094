@@ -6,7 +6,7 @@ A cluster where someone ran `flux install` has Flux, but it is not run from Git.
 
 Keep one sentence in mind: **bootstrap writes Flux into Git first, and then lets Flux apply Git.** Everything in this module follows from it, including why running bootstrap twice is safe and why a changed Git password stops the whole cluster from following Git.
 
-The module has three parts. **What flux bootstrap Does** walks through the steps of a bootstrap, the three files it writes and the bootstrap command for each kind of Git server. **Bootstrapping A Kind Cluster And Verifying It** runs `flux bootstrap git` against the Git server in your playground, checks the result, and deploys an application through Git. A graded lab follows it. **Deploy Keys, Tokens And The flux-system Secret** explains the credential Flux uses to read its repository and how to replace it.
+The module has four parts. **What flux bootstrap Does** walks through the steps of a bootstrap, the three files it writes and the bootstrap command for each kind of Git server. **Bootstrapping A Kind Cluster And Verifying It** runs `flux bootstrap git` against the Git server in your playground, checks the result, and deploys an application through Git. A graded lab follows it. **Deploy Keys, Tokens And The flux-system Secret** explains the credential Flux uses to read its repository and how to replace it. **Troubleshooting A Bootstrap** lists the failures in the order they appear and gives a checklist to run after every bootstrap.
 
 ## Learning objectives
 
@@ -19,6 +19,7 @@ After this module you can:
 - Bootstrap Flux with `flux bootstrap git` and verify the controllers, the CRDs and the `flux-system` objects.
 - Deploy an application by committing a Flux `Kustomization` object next to `flux-system`.
 - Describe what the `flux-system` Secret holds for token and SSH authentication, and replace a rotated credential.
+- Diagnose a bootstrap that fails while it runs or leaves a cluster that does not follow Git.
 
 ## Before you start
 
